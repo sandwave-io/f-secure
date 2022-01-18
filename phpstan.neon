@@ -1,0 +1,17 @@
+parameters:
+    # checkGenericClassInNonGenericObjectType: false
+    # checkMissingIterableValueType: false
+    level: 8
+    paths:
+        - src
+        - tests
+    disallowedFunctionCalls:
+        -
+            function: 'var_dump()'
+            message: 'use logger instead'
+        -
+            function: 'dump()'
+            message: 'use logger instead'
+        -
+            function: 'print_r()'
+            message: 'use logger instead'
