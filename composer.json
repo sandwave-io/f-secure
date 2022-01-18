@@ -1,18 +1,22 @@
 {
-    "name": "sandwave-io/f-secure",
-    "description": "A http client for the F-secure REST API.",
-    "type": "library",
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "SandwaveIo\\FSecure\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "George Boon",
-            "email": "2912468+gcumbaya@users.noreply.github.com"
-        }
-    ],
-    "require": {}
+  "name": "sandwave-io/f-secure",
+  "description": "A http client for the F-secure REST API.",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "SandwaveIo\\FSecure\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "George Boon",
+      "email": "2912468+gcumbaya@users.noreply.github.com"
+    }
+  ],
+  "require": {
+    "php": "^7.4|^8.0"
+  },
+  "require-dev": {
+  }
 }
