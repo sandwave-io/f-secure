@@ -44,7 +44,7 @@
   },
   "scripts": {
     "phpcs-fix": "vendor/bin/php-cs-fixer fix",
-    "phpcs-fix-dryrun": "vendor/bin/php-cs-fixer fix --dry-run --diff --show-progress=none -vvv",
+    "phpcs-fix-dryrun": "vendor/bin/php-cs-fixer fix --dry-run --diff --show-progress=none -vvv --using-cache=no",
     "phpunit": "vendor/bin/phpunit --coverage-text",
     "phpstan": "vendor/bin/phpstan analyze",
     "analyze": [
