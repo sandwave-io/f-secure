@@ -1,3 +1,8 @@
+includes:
+    - vendor/spaze/phpstan-disallowed-calls/disallowed-dangerous-calls.neon
+    - vendor/spaze/phpstan-disallowed-calls/disallowed-execution-calls.neon
+    - vendor/spaze/phpstan-disallowed-calls/disallowed-insecure-calls.neon
+    - vendor/spaze/phpstan-disallowed-calls/disallowed-loose-calls.neon
 parameters:
     # checkGenericClassInNonGenericObjectType: false
     # checkMissingIterableValueType: false
@@ -5,13 +10,3 @@ parameters:
     paths:
         - src
 #        - tests
-    disallowedFunctionCalls:
-        -
-            function: 'var_dump()'
-            message: 'use logger instead'
-        -
-            function: 'dump()'
-            message: 'use logger instead'
-        -
-            function: 'print_r()'
-            message: 'use logger instead'
