@@ -7,7 +7,7 @@ namespace SandwaveIo\FSecure;
 use SandwaveIo\FSecure\Client\ProductClient;
 use SandwaveIo\FSecure\Client\RestClientInterface;
 
-final class FsecureApi
+final class FsecureClient
 {
     private ProductClient $productClient;
 

@@ -39,7 +39,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "SandwaveIo\\Acronis\\Tests\\": "tests/"
+      "SandwaveIo\\FSecure\\Tests\\": "tests/"
     }
   },
   "config": {

@@ -21,11 +21,11 @@ final class Product
 
     public string $ean;
 
-    public float $distributorPrice;
+    public string $distributorPrice;
 
-    public ?float $resellerPrice;
+    public ?string $resellerPrice;
 
-    public ?float $suggestedRetailPrice;
+    public ?string $suggestedRetailPrice;
 
     public int $variationId;
 
