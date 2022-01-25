@@ -27,4 +27,10 @@ final class Order
      * @Serializer\Type("array<SandwaveIo\FSecure\Entity\OrderVariation>")
      */
     public array $variations;
+
+    /**
+     * @var OrderVariation[]
+     * @Serializer\Type("array<SandwaveIo\FSecure\Entity\OrderVariation>")
+     */
+    public array $rows;
 }
