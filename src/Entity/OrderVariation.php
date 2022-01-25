@@ -9,7 +9,7 @@ use JMS\Serializer\Annotation as Serializer;
 /**
  * @Serializer\ExclusionPolicy("none")
  */
-final class Product
+final class OrderVariation
 {
     public string $type;
 
@@ -31,8 +31,6 @@ final class Product
 
     public string $sellType;
 
-    public ?bool $canSell;
-
     public int $productId;
 
     public string $productLine;
@@ -40,4 +38,8 @@ final class Product
     public string $productTitle;
 
     public string $language;
+
+    public ?string $licenseKey;
+
+    public ?string $installationUrl;
 }
