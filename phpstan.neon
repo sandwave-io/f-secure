@@ -10,3 +10,7 @@ parameters:
     paths:
         - src
         - tests
+    ergebnis:
+        classesAllowedToBeExtended:
+            - RuntimeException
+            - SandwaveIo\FSecure\Exception\FsecureException
