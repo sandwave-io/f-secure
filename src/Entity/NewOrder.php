@@ -6,7 +6,7 @@ namespace SandwaveIo\FSecure\Entity;
 
 use JMS\Serializer\Annotation as Serializer;
 
-class NewOrder
+final class NewOrder
 {
     /**
      * @Serializer\Groups({"create_data"})
@@ -42,7 +42,6 @@ class NewOrder
      * @Serializer\Groups({"create_data"})
      */
     public ?string $customerEmail = null;
-
 
     public function __construct(
         int $variationId,
