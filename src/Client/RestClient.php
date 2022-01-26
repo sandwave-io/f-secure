@@ -14,7 +14,6 @@ use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\TooManyRedirectsException;
 use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\RequestOptions;
-use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
 use JsonException;
 use Psr\Http\Message\ResponseInterface;
@@ -86,7 +85,7 @@ final class RestClient implements RestClientInterface
     public function post(string $url, object $data, string $returnType)
     {
         $this->assertValidClass($returnType);
-        $json = $this->serializer->serialize($data, 'json', SerializationContext::create()->setGroups(['create_data']));
+        $json = $this->serializer->serialize($data, 'json');
 
         $response = $this->request('POST', $url, [
             'body'    => $json,
