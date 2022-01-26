@@ -1,0 +1,104 @@
+{
+  "items": [
+    {
+      "customerReference": "sdf|456",
+      "storeId": 7112,
+      "created": "2022-01-25T10:16:31.000Z",
+      "variations": [
+        {
+          "productId": 21,
+          "productLine": "",
+          "productTitle": "F-Secure TOTAL Recurring",
+          "sellType": "continuous",
+          "language": "en",
+          "type": "recurring",
+          "duration": 0,
+          "amount": 15,
+          "sku": "xx15",
+          "ean": "xx15",
+          "variationId": 641,
+          "licenseKey": "ABCDE-FGHIJ-KLMNO-PQRST",
+          "installationUrl": "https://localhost/ABCDE-FGHIJ-KLMNO-PQRST",
+          "distributorPrice": "9.95",
+          "resellerPrice": null,
+          "suggestedRetailPrice": null
+        }
+      ]
+    },
+    {
+      "customerReference": "sdf|456",
+      "storeId": 7112,
+      "created": "2022-01-25T10:11:26.000Z",
+      "variations": [
+        {
+          "productId": 21,
+          "productLine": "",
+          "productTitle": "F-Secure TOTAL Recurring",
+          "sellType": "continuous",
+          "language": "en",
+          "type": "recurring",
+          "duration": 0,
+          "amount": 15,
+          "sku": "xx15",
+          "ean": "xx15",
+          "variationId": 641,
+          "licenseKey": "ABCDE-FGHIJ-KLMNO-PQRST",
+          "installationUrl": "https://localhost/ABCDE-FGHIJ-KLMNO-PQRST",
+          "distributorPrice": "9.95",
+          "resellerPrice": null,
+          "suggestedRetailPrice": null
+        }
+      ]
+    },
+    {
+      "customerReference": "sdf|456",
+      "storeId": 7112,
+      "created": "2022-01-25T10:11:19.000Z",
+      "variations": [
+        {
+          "productId": 21,
+          "productLine": "",
+          "productTitle": "F-Secure TOTAL Recurring",
+          "sellType": "continuous",
+          "language": "en",
+          "type": "recurring",
+          "duration": 0,
+          "amount": 10,
+          "sku": "xx10",
+          "ean": "xx10",
+          "variationId": 640,
+          "licenseKey": "ABCDE-FGHIJ-KLMNO-PQRST",
+          "installationUrl": "https://localhost/ABCDE-FGHIJ-KLMNO-PQRST",
+          "distributorPrice": "6.62",
+          "resellerPrice": null,
+          "suggestedRetailPrice": null
+        }
+      ]
+    },
+    {
+      "customerReference": "",
+      "storeId": 7112,
+      "created": "2021-12-07T14:05:16.000Z",
+      "variations": [
+        {
+          "productId": 84,
+          "productLine": "",
+          "productTitle": "TOTAL 1Y 5D",
+          "sellType": "continuous",
+          "language": "en",
+          "type": "new",
+          "duration": 360,
+          "amount": 5,
+          "sku": "sku",
+          "ean": "ean",
+          "variationId": 529,
+          "licenseKey": "ABCDE-FGHIJ-KLMNO-PQRST",
+          "installationUrl": "https://localhost/ABCDE-FGHIJ-KLMNO-PQRST",
+          "distributorPrice": null,
+          "resellerPrice": null,
+          "suggestedRetailPrice": null
+        }
+      ]
+    }
+  ]
+}

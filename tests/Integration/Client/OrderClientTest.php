@@ -14,13 +14,15 @@ use JMS\Serializer\SerializerBuilder;
 use PHPUnit\Framework\TestCase;
 use SandwaveIo\FSecure\Client\RestClient;
 use SandwaveIo\FSecure\Entity\NewOrder;
+use SandwaveIo\FSecure\Entity\SuspendOrder;
+use SandwaveIo\FSecure\Exception\BadRequestException;
 use SandwaveIo\FSecure\FsecureClient;
 
 final class OrderClientTest extends TestCase
 {
     public function testGet(): void
     {
-        $json = '{"items":[{"customerReference":"sdf|456","storeId":7112,"created":"2022-01-25T10:16:31.000Z","variations":[{"productId":21,"productLine":"","productTitle":"F-Secure TOTAL Recurring","sellType":"continuous","language":"en","type":"recurring","duration":0,"amount":15,"sku":"xx15","ean":"xx15","variationId":641,"licenseKey":"ABCDE-FGHIJ-KLMNO-PQRST","installationUrl":"https://localhost/ABCDE-FGHIJ-KLMNO-PQRST","distributorPrice":"9.95","resellerPrice":null,"suggestedRetailPrice":null}]},{"customerReference":"sdf|456","storeId":7112,"created":"2022-01-25T10:11:26.000Z","variations":[{"productId":21,"productLine":"","productTitle":"F-Secure TOTAL Recurring","sellType":"continuous","language":"en","type":"recurring","duration":0,"amount":15,"sku":"xx15","ean":"xx15","variationId":641,"licenseKey":"ABCDE-FGHIJ-KLMNO-PQRST","installationUrl":"https://localhost/ABCDE-FGHIJ-KLMNO-PQRST","distributorPrice":"9.95","resellerPrice":null,"suggestedRetailPrice":null}]},{"customerReference":"sdf|456","storeId":7112,"created":"2022-01-25T10:11:19.000Z","variations":[{"productId":21,"productLine":"","productTitle":"F-Secure TOTAL Recurring","sellType":"continuous","language":"en","type":"recurring","duration":0,"amount":10,"sku":"xx10","ean":"xx10","variationId":640,"licenseKey":"ABCDE-FGHIJ-KLMNO-PQRST","installationUrl":"https://localhost/ABCDE-FGHIJ-KLMNO-PQRST","distributorPrice":"6.62","resellerPrice":null,"suggestedRetailPrice":null}]},{"customerReference":"","storeId":7112,"created":"2021-12-07T14:05:16.000Z","variations":[{"productId":84,"productLine":"","productTitle":"TOTAL 1Y 5D","sellType":"continuous","language":"en","type":"new","duration":360,"amount":5,"sku":"sku","ean":"ean","variationId":529,"licenseKey":"ABCDE-FGHIJ-KLMNO-PQRST","installationUrl":"https://localhost/ABCDE-FGHIJ-KLMNO-PQRST","distributorPrice":null,"resellerPrice":null,"suggestedRetailPrice":null}]}]}';
+        $json = (string) file_get_contents(__DIR__ . '/../Data/Response/GetOrders.json');
 
         $mockHandler = new MockHandler(
             [new Response(200, [], $json)]
@@ -69,7 +71,7 @@ final class OrderClientTest extends TestCase
 
     public function testCreate(): void
     {
-        $json = '{"customerReference":"Test order","storeId":123,"created":"2020-01-02T02:01:01.000Z","rows":[{"licenseKey":"ABCDE-FGHIJ-KLMNO-PQRST","installationUrl":"https://localhost/ABCDE-FGHIJ-KLMNO-PQRST","variationId":1,"type":"new","duration":360,"amount":1,"sku":"FCFXBR1N001XH","ean":"6430052573209","productId":10,"productTitle":"Safe","language":"en","productLine":"","sellType":"continuous","distributorPrice":123.45,"resellerPrice":123.45,"suggestedRetailPrice":123.45}]}';
+        $json = (string) file_get_contents(__DIR__ . '/../Data/Response/NewOrder.json');
 
         $mockHandler = new MockHandler(
             [new Response(200, [], $json)]
@@ -113,5 +115,95 @@ final class OrderClientTest extends TestCase
         self::assertSame('123.45', $orderVariation->distributorPrice);
         self::assertSame('123.45', $orderVariation->resellerPrice);
         self::assertSame('123.45', $orderVariation->suggestedRetailPrice);
+    }
+
+    public function testSuspendOrderBadRequest(): void
+    {
+        $this->expectException(BadRequestException::class);
+        $jsonResponse = (string) file_get_contents(__DIR__ . '/../Data/Response/SuspendOrderMissingRequired.json');
+
+        $mockHandler = new MockHandler(
+            [new Response(400, [], $jsonResponse)]
+        );
+        $stack = HandlerStack::create($mockHandler);
+        $guzzle = new Client(['handler' => $stack]);
+
+        $serializerBuilder = new SerializerBuilder();
+        $serializer = $serializerBuilder->setPropertyNamingStrategy(
+            new SerializedNameAnnotationStrategy(
+                new IdenticalPropertyNamingStrategy()
+            )
+        )->build();
+
+        $restClient = new RestClient($guzzle, $serializer);
+
+        $fsecureClient = new FsecureClient($restClient);
+        $fsecureClient->getOrderClient()->suspend(new SuspendOrder());
+    }
+
+    public function testSuspendOrderByLicenseKey(): void
+    {
+        $jsonResponse = (string) file_get_contents(__DIR__ . '/../Data/Response/SuspendOrderByLicenseKey.json');
+
+        $mockHandler = new MockHandler(
+            [new Response(200, [], $jsonResponse)]
+        );
+        $stack = HandlerStack::create($mockHandler);
+        $guzzle = new Client(['handler' => $stack]);
+
+        $serializerBuilder = new SerializerBuilder();
+        $serializer = $serializerBuilder->setPropertyNamingStrategy(
+            new SerializedNameAnnotationStrategy(
+                new IdenticalPropertyNamingStrategy()
+            )
+        )->build();
+
+        $restClient = new RestClient($guzzle, $serializer);
+
+        $fsecureClient = new FsecureClient($restClient);
+        $suspendOrder = new SuspendOrder();
+        $suspendOrder->licenseKey = 'XXXX-YYYY-ZZZZ-AAAA';
+        $result = $fsecureClient->getOrderClient()->suspend($suspendOrder);
+
+        self::assertCount(1, $result->items);
+        self::assertSame($suspendOrder->licenseKey, $result->items[0]->licenseKey);
+        self::assertSame('customer1', $result->items[0]->customerReference);
+    }
+
+    public function testSuspendOrderByCustomerReference(): void
+    {
+        $jsonResponse = (string) file_get_contents(__DIR__ . '/../Data/Response/SuspendOrderByCustomerReference.json');
+
+        $mockHandler = new MockHandler(
+            [new Response(200, [], $jsonResponse)]
+        );
+        $stack = HandlerStack::create($mockHandler);
+        $guzzle = new Client(['handler' => $stack]);
+
+        $serializerBuilder = new SerializerBuilder();
+        $serializer = $serializerBuilder->setPropertyNamingStrategy(
+            new SerializedNameAnnotationStrategy(
+                new IdenticalPropertyNamingStrategy()
+            )
+        )->build();
+
+        $restClient = new RestClient($guzzle, $serializer);
+
+        $fsecureClient = new FsecureClient($restClient);
+        $suspendOrder = new SuspendOrder();
+        $suspendOrder->customerReference = 'customer1';
+        $result = $fsecureClient->getOrderClient()->suspend($suspendOrder);
+
+        self::assertCount(2, $result->items);
+        self::assertCount(1, $result->alreadySuspendedItems);
+
+        self::assertSame($suspendOrder->customerReference, $result->items[0]->customerReference);
+        self::assertSame('XXXX-YYYY-ZZZZ-BBBB', $result->items[0]->licenseKey);
+
+        self::assertSame($suspendOrder->customerReference, $result->items[1]->customerReference);
+        self::assertSame('XXXX-YYYY-ZZZZ-CCCC', $result->items[1]->licenseKey);
+
+        self::assertSame($suspendOrder->customerReference, $result->alreadySuspendedItems[0]->customerReference);
+        self::assertSame('XXXX-YYYY-ZZZZ-AAAA', $result->alreadySuspendedItems[0]->licenseKey);
     }
 }

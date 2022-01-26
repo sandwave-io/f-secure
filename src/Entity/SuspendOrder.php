@@ -11,7 +11,7 @@ use JMS\Serializer\Annotation as Serializer;
  */
 final class SuspendOrder
 {
-    public ?string $customerReference;
+    public ?string $customerReference = null;
 
-    public ?string $licenseKey;
+    public ?string $licenseKey = null;
 }
