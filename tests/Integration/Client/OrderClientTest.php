@@ -16,10 +16,20 @@ use SandwaveIo\FSecure\Client\RestClient;
 use SandwaveIo\FSecure\Entity\NewOrder;
 use SandwaveIo\FSecure\Entity\SuspendOrder;
 use SandwaveIo\FSecure\Exception\BadRequestException;
+use SandwaveIo\FSecure\Exception\FsecureException;
 use SandwaveIo\FSecure\FsecureClient;
+use SandwaveIo\FSecure\Service\ExceptionConvertor;
 
 final class OrderClientTest extends TestCase
 {
+    private ExceptionConvertor $exceptionConvertor;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->exceptionConvertor = new ExceptionConvertor();
+    }
+
     public function testGet(): void
     {
         $json = (string) file_get_contents(__DIR__ . '/../Data/Response/GetOrders.json');
@@ -37,7 +47,7 @@ final class OrderClientTest extends TestCase
             )
         )->build();
 
-        $restClient = new RestClient($guzzle, $serializer);
+        $restClient = new RestClient($guzzle, $serializer, $this->exceptionConvertor);
 
         $fsecureClient = new FsecureClient($restClient);
         $orderCollection = $fsecureClient->getOrderClient()->get();
@@ -69,6 +79,32 @@ final class OrderClientTest extends TestCase
         self::assertNull($orderVariation->suggestedRetailPrice);
     }
 
+    public function testCreateInvalidVariationId(): void
+    {
+        $this->expectException(FsecureException::class);
+        $json = (string) file_get_contents(__DIR__ . '/../Data/Response/NewOrderInvalidVariationId.json');
+
+        $mockHandler = new MockHandler(
+            [new Response(400, [], $json)]
+        );
+        $stack = HandlerStack::create($mockHandler);
+        $guzzle = new Client(['handler' => $stack]);
+
+        $serializerBuilder = new SerializerBuilder();
+        $serializer = $serializerBuilder->setPropertyNamingStrategy(
+            new SerializedNameAnnotationStrategy(
+                new IdenticalPropertyNamingStrategy()
+            )
+        )->build();
+
+        $restClient = new RestClient($guzzle, $serializer, $this->exceptionConvertor);
+
+        $newOrder = new NewOrder(1111111111, 'Test order', 123);
+
+        $fsecureClient = new FsecureClient($restClient);
+        $fsecureClient->getOrderClient()->create($newOrder);
+    }
+
     public function testCreate(): void
     {
         $json = (string) file_get_contents(__DIR__ . '/../Data/Response/NewOrder.json');
@@ -86,7 +122,7 @@ final class OrderClientTest extends TestCase
             )
         )->build();
 
-        $restClient = new RestClient($guzzle, $serializer);
+        $restClient = new RestClient($guzzle, $serializer, $this->exceptionConvertor);
 
         $newOrder = new NewOrder(1, 'Test order', 123);
 
@@ -135,7 +171,7 @@ final class OrderClientTest extends TestCase
             )
         )->build();
 
-        $restClient = new RestClient($guzzle, $serializer);
+        $restClient = new RestClient($guzzle, $serializer, $this->exceptionConvertor);
 
         $fsecureClient = new FsecureClient($restClient);
         $fsecureClient->getOrderClient()->suspend(new SuspendOrder());
@@ -158,7 +194,7 @@ final class OrderClientTest extends TestCase
             )
         )->build();
 
-        $restClient = new RestClient($guzzle, $serializer);
+        $restClient = new RestClient($guzzle, $serializer, $this->exceptionConvertor);
 
         $fsecureClient = new FsecureClient($restClient);
         $suspendOrder = new SuspendOrder();
@@ -187,7 +223,7 @@ final class OrderClientTest extends TestCase
             )
         )->build();
 
-        $restClient = new RestClient($guzzle, $serializer);
+        $restClient = new RestClient($guzzle, $serializer, $this->exceptionConvertor);
 
         $fsecureClient = new FsecureClient($restClient);
         $suspendOrder = new SuspendOrder();

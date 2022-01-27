@@ -4,27 +4,15 @@ declare(strict_types=1);
 
 namespace SandwaveIo\FSecure\Client;
 
-use Exception;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Exception\ServerException;
-use GuzzleHttp\Exception\TooManyRedirectsException;
 use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\RequestOptions;
 use JMS\Serializer\SerializerInterface;
-use JsonException;
 use Psr\Http\Message\ResponseInterface;
-use SandwaveIo\FSecure\Exception\BadRequestException;
 use SandwaveIo\FSecure\Exception\DeserializationException;
 use SandwaveIo\FSecure\Exception\FsecureException;
-use SandwaveIo\FSecure\Exception\NetworkException;
-use SandwaveIo\FSecure\Exception\ResourceNotFoundException;
-use SandwaveIo\FSecure\Exception\ServerException as FSecureServerException;
-use SandwaveIo\FSecure\Exception\UnauthorizedException;
-use SandwaveIo\FSecure\Exception\UnknownException;
+use SandwaveIo\FSecure\Service\ExceptionConvertor;
 
 final class RestClient implements RestClientInterface
 {
@@ -34,10 +22,13 @@ final class RestClient implements RestClientInterface
 
     private SerializerInterface $serializer;
 
-    public function __construct(ClientInterface $client, SerializerInterface $serializer)
+    private ExceptionConvertor $exceptionConvertor;
+
+    public function __construct(ClientInterface $client, SerializerInterface $serializer, ExceptionConvertor $exceptionConvertor)
     {
         $this->client = $client;
         $this->serializer = $serializer;
+        $this->exceptionConvertor = $exceptionConvertor;
     }
 
     /**
@@ -57,18 +48,6 @@ final class RestClient implements RestClientInterface
         $json = $this->get($url);
 
         return $this->serializer->deserialize($json, $returnType, 'json');
-    }
-
-    /**
-     * @param string $url
-     *
-     * @throws GuzzleException
-     *
-     * @return string
-     */
-    public function getRawData(string $url): string
-    {
-        return $this->get($url);
     }
 
     /**
@@ -122,7 +101,7 @@ final class RestClient implements RestClientInterface
         try {
             $response = $this->client->request($method, $url, array_merge($options, $this->getRequestOptions()));
         } catch (TransferException $exception) {
-            throw $this->convertException($exception);
+            throw $this->exceptionConvertor->convert($exception);
         }
 
         return $response;
@@ -148,74 +127,5 @@ final class RestClient implements RestClientInterface
         if (! class_exists($className)) {
             throw new DeserializationException(sprintf('Supplied classname %s does not exist', $className));
         }
-    }
-
-    private function convertException(Exception $exception): FsecureException
-    {
-        $message = $exception instanceof RequestException ? $this->convertMessage($exception) : $exception->getMessage(
-        );
-
-        if ($exception instanceof ConnectException || $exception instanceof TooManyRedirectsException) {
-            return new NetworkException($message, 0, $exception);
-        }
-
-        if ($exception instanceof ServerException) {
-            // error 500 range
-            return new FSecureServerException($message, 0, $exception);
-        }
-
-        if ($exception instanceof ClientException) {
-            if ($exception->getCode() === 404) {
-                return new ResourceNotFoundException($message, 0, $exception);
-            }
-
-            if ($exception->getCode() === 401) {
-                return new UnauthorizedException($message, 0, $exception);
-            }
-
-            // 400 range
-            return new BadRequestException($message, 0, $exception);
-        }
-
-        return new UnknownException($message, 0, $exception);
-    }
-
-    private function convertMessage(RequestException $exception): string
-    {
-        $response = $exception->getResponse();
-
-        if (null === $response) {
-            return $exception->getMessage();
-        }
-
-        $body = $response->getBody()->getContents();
-        try {
-            $decoded = json_decode($body, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
-            $decoded = null;
-        }
-
-        if (null === $decoded) {
-            return $exception->getMessage();
-        }
-
-        if (array_key_exists('error', $decoded)) {
-            if (
-                array_key_exists('details', $decoded['error'])
-                && array_key_exists('info', $decoded['error']['details'])
-                && is_string($decoded['error']['details']['info'])) {
-                return $decoded['error']['details']['info'];
-            }
-
-            if (array_key_exists('message', $decoded['error']) && is_string($decoded['error']['message'])) {
-                return $decoded['error']['message'];
-            }
-        }
-
-        if (array_key_exists('error_description', $decoded) && is_string($decoded['error_description'])) {
-            return $decoded['error_description'];
-        }
-
-        return $exception->getMessage();
     }
 }

@@ -21,11 +21,6 @@ interface RestClientInterface
     public function getEntity(string $url, string $returnType): object;
 
     /**
-     * @throws FsecureException
-     */
-    public function getRawData(string $url): string;
-
-    /**
      * @template T
      *
      * @param string          $url

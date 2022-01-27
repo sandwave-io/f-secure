@@ -14,6 +14,7 @@ use JMS\Serializer\SerializerBuilder;
 use PHPUnit\Framework\TestCase;
 use SandwaveIo\FSecure\Client\RestClient;
 use SandwaveIo\FSecure\FsecureClient;
+use SandwaveIo\FSecure\Service\ExceptionConvertor;
 
 final class ProductClientTest extends TestCase
 {
@@ -34,7 +35,7 @@ final class ProductClientTest extends TestCase
             )
         )->build();
 
-        $restClient = new RestClient($guzzle, $serializer);
+        $restClient = new RestClient($guzzle, $serializer, new ExceptionConvertor());
 
         $fsecureClient = new FsecureClient($restClient);
         $productCollection = $fsecureClient->getProductClient()->get();

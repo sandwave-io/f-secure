@@ -1,0 +1,6 @@
+{
+  "access_token": "60048a266cc74468b9bdb574f12d4555cbefb3db",
+  "token_type": "Bearer",
+  "expires_in": 3599,
+  "scope": "license_orders_write license_orders_read license_products_read"
+}
