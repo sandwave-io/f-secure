@@ -4,8 +4,6 @@ includes:
     - vendor/spaze/phpstan-disallowed-calls/disallowed-insecure-calls.neon
     - vendor/spaze/phpstan-disallowed-calls/disallowed-loose-calls.neon
 parameters:
-    # checkGenericClassInNonGenericObjectType: false
-    # checkMissingIterableValueType: false
     level: 8
     paths:
         - src
