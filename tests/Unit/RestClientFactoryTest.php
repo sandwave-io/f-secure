@@ -2,13 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SandwaveIo\Acronis\Tests\Unit;
+namespace SandwaveIo\FSecure\Tests\Unit;
 
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 use SandwaveIo\FSecure\RestClientFactory;
-
-use function PHPUnit\Framework\assertInstanceOf;
 
 final class RestClientFactoryTest extends TestCase
 {
@@ -17,6 +15,6 @@ final class RestClientFactoryTest extends TestCase
         $clientFactory = new RestClientFactory('url');
         $client = $clientFactory->create();
 
-        assertInstanceOf(Client::class, $client);
+        self::assertInstanceOf(Client::class, $client);
     }
 }

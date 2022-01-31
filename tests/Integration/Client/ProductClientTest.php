@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SandwaveIo\Acronis\Tests\Integration\Client;
+namespace SandwaveIo\FSecure\Tests\Integration\Client;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SandwaveIo\Acronis\Tests\Unit\Service;
+namespace SandwaveIo\FSecure\Tests\Unit\Service;
 
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;

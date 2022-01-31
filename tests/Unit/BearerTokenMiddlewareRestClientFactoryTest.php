@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SandwaveIo\Acronis\Tests\Unit;
+namespace SandwaveIo\FSecure\Tests\Unit;
 
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;

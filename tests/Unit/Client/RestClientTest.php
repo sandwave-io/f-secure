@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SandwaveIo\Acronis\Tests\Unit\Client;
+namespace SandwaveIo\FSecure\Tests\Unit\Client;
 
 use GuzzleHttp\ClientInterface;
 use JMS\Serializer\SerializerInterface;
@@ -22,7 +22,7 @@ final class RestClientTest extends TestCase
         );
 
         /** @var class-string $class */
-        $class = 'SandwaveIo\Acronis\NotExistingClass';
+        $class = 'SandwaveIo\FSecure\NotExistingClass';
 
         $this->expectException(DeserializationException::class);
         $client->getEntity('url', $class);
