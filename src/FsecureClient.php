@@ -6,7 +6,7 @@ namespace SandwaveIo\FSecure;
 
 use SandwaveIo\FSecure\Client\OrderClient;
 use SandwaveIo\FSecure\Client\ProductClient;
-use SandwaveIo\FSecure\Client\RestClientInterface;
+use SandwaveIo\FSecure\Client\ClientInterface;
 
 final class FsecureClient
 {
@@ -14,7 +14,7 @@ final class FsecureClient
 
     private OrderClient $orderClient;
 
-    public function __construct(RestClientInterface $restClient)
+    public function __construct(ClientInterface $restClient)
     {
         $this->setClient($restClient);
     }
@@ -29,7 +29,7 @@ final class FsecureClient
         return $this->orderClient;
     }
 
-    private function setClient(RestClientInterface $client): void
+    private function setClient(ClientInterface $client): void
     {
         $this->productClient = new ProductClient($client);
         $this->orderClient = new OrderClient($client);

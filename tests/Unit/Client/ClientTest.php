@@ -7,15 +7,15 @@ namespace SandwaveIo\FSecure\Tests\Unit\Client;
 use GuzzleHttp\ClientInterface;
 use JMS\Serializer\SerializerInterface;
 use PHPUnit\Framework\TestCase;
-use SandwaveIo\FSecure\Client\RestClient;
+use SandwaveIo\FSecure\Client\Client;
 use SandwaveIo\FSecure\Exception\DeserializationException;
 use SandwaveIo\FSecure\Service\ThrowableConvertor;
 
-final class RestClientTest extends TestCase
+final class ClientTest extends TestCase
 {
     public function testInvalidReturnType(): void
     {
-        $client = new RestClient(
+        $client = new Client(
             $this->createMock(ClientInterface::class),
             $this->createMock(SerializerInterface::class),
             new ThrowableConvertor()

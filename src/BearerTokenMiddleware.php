@@ -6,16 +6,16 @@ namespace SandwaveIo\FSecure;
 
 use Closure;
 use Psr\Http\Message\RequestInterface;
-use SandwaveIo\FSecure\Client\AuthRestClientInterface;
+use SandwaveIo\FSecure\Client\AuthClientInterface;
 use SandwaveIo\FSecure\Entity\AccessToken;
 
 final class BearerTokenMiddleware
 {
     private ?AccessToken $accessToken = null;
 
-    private AuthRestClientInterface $restClient;
+    private AuthClientInterface $restClient;
 
-    public function __construct(AuthRestClientInterface $restClient)
+    public function __construct(AuthClientInterface $restClient)
     {
         $this->restClient = $restClient;
     }

@@ -10,7 +10,7 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use SandwaveIo\FSecure\BearerTokenMiddleware;
-use SandwaveIo\FSecure\Client\AuthRestClientInterface;
+use SandwaveIo\FSecure\Client\AuthClientInterface;
 use SandwaveIo\FSecure\Entity\AccessToken;
 
 final class BearerTokenMiddlewareTest extends TestCase
@@ -23,7 +23,7 @@ final class BearerTokenMiddlewareTest extends TestCase
         $accessToken->scope = 'fakeScope';
         $accessToken->accessToken = 'fakeToken';
 
-        $authClient = $this->createMock(AuthRestClientInterface::class);
+        $authClient = $this->createMock(AuthClientInterface::class);
         $authClient
             ->expects(self::once())
             ->method('getToken')

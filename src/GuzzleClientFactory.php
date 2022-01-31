@@ -7,7 +7,7 @@ namespace SandwaveIo\FSecure;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 
-final class RestClientFactory implements RestClientFactoryInterface
+final class GuzzleClientFactory implements GuzzleClientFactoryInterface
 {
     private string $url;
 

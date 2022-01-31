@@ -19,48 +19,45 @@ use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
 use JMS\Serializer\Naming\SerializedNameAnnotationStrategy;
 use JMS\Serializer\SerializerBuilder;
 use SandwaveIo\FSecure\BearerTokenMiddleware;
-use SandwaveIo\FSecure\BearerTokenMiddlewareRestClientFactory;
+use SandwaveIo\FSecure\BearerTokenMiddlewareGuzzleClientFactory;
+use SandwaveIo\FSecure\Client\Client;
 use SandwaveIo\FSecure\Client\AuthClient;
-use SandwaveIo\FSecure\Client\RestClient;
 use SandwaveIo\FSecure\FsecureClient;
-use SandwaveIo\FSecure\RestClientFactory;
+use SandwaveIo\FSecure\GuzzleClientFactory;
+use SandwaveIo\FSecure\Service\ThrowableConvertor;
 
 $apiEndpoint = 'https://vip.f-secure.com/api/v2/';
 $clientId = 'client_id';
 $clientSecret = 'client_secret';
 
-$serializerBuilder = new SerializerBuilder();
-
-$factory = new RestClientFactory(
-    $apiEndpoint,
-);
-
-$authClient = new AuthClient(
+// create AuthClient
+$auth = new AuthClient(
     $clientId,
     $clientSecret,
-    $factory->create(),
-    $serializerBuilder->build(),
-    new SandwaveIo\FSecure\Service\ThrowableConvertor()
+    (new GuzzleClientFactory($apiEndpoint))->create(),
+    (new SerializerBuilder())->build(),
+    new ThrowableConvertor()
 );
 
-$factory = new BearerTokenMiddlewareRestClientFactory(
-    $apiEndpoint,
-    new BearerTokenMiddleware($authClient)
-);
+// use AuthClient to create a guzzleclient binded with middleware for handling the bearer token
+$guzzleClient = (new BearerTokenMiddlewareGuzzleClientFactory(
+    $apiEndpoint, new BearerTokenMiddleware($auth)
+))->create();
 
-$serializerBuilder = new SerializerBuilder();
-$restClient = new RestClient(
-    $factory->create(),
-    $serializerBuilder->setPropertyNamingStrategy(
+// create client by passing by injecting the guzzleclient
+$client = new Client(
+    $guzzleClient,
+    (new SerializerBuilder())->setPropertyNamingStrategy(
         new SerializedNameAnnotationStrategy(
             new IdenticalPropertyNamingStrategy()
         )
     )->build(),
-    new SandwaveIo\FSecure\Service\ThrowableConvertor()
+    new ThrowableConvertor()
 );
 
-$fsecureApi = new FsecureClient($restClient);
-$products = $fsecureApi->getProductClient()->get();
+// use client to create FsecureClient
+$fsecureApi = new FsecureClient($client);
+$result = $fsecureApi->getProductClient()->get();
 ```
 
 ## How to contribute

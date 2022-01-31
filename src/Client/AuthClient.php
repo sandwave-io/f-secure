@@ -12,7 +12,7 @@ use GuzzleHttp\ClientInterface;
 use SandwaveIo\FSecure\Service\ThrowableConvertor;
 use Throwable;
 
-final class AuthClient implements AuthRestClientInterface
+final class AuthClient implements AuthClientInterface
 {
     private const GET_TOKEN = 'oauth2/token';
     private const REQUEST_TIMEOUT = 5;

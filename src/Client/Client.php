@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SandwaveIo\FSecure\Client;
 
-use GuzzleHttp\ClientInterface;
+use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use GuzzleHttp\RequestOptions;
 use JMS\Serializer\SerializerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -13,17 +13,17 @@ use SandwaveIo\FSecure\Exception\FsecureException;
 use SandwaveIo\FSecure\Service\ThrowableConvertor;
 use Throwable;
 
-final class RestClient implements RestClientInterface
+final class Client implements ClientInterface
 {
     private const REQUEST_TIMEOUT = 5;
 
-    private ClientInterface $client;
+    private GuzzleClientInterface $client;
 
     private SerializerInterface $serializer;
 
     private ThrowableConvertor $exceptionConvertor;
 
-    public function __construct(ClientInterface $client, SerializerInterface $serializer, ThrowableConvertor $exceptionConvertor)
+    public function __construct(GuzzleClientInterface $client, SerializerInterface $serializer, ThrowableConvertor $exceptionConvertor)
     {
         $this->client = $client;
         $this->serializer = $serializer;

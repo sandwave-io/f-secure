@@ -6,7 +6,7 @@ namespace SandwaveIo\FSecure;
 
 use GuzzleHttp\ClientInterface;
 
-interface RestClientFactoryInterface
+interface GuzzleClientFactoryInterface
 {
     public function create(): ClientInterface;
 }

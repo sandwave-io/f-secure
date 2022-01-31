@@ -7,8 +7,8 @@ namespace SandwaveIo\FSecure\Tests\Unit;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 use SandwaveIo\FSecure\BearerTokenMiddleware;
-use SandwaveIo\FSecure\BearerTokenMiddlewareRestClientFactory;
-use SandwaveIo\FSecure\Client\AuthRestClientInterface;
+use SandwaveIo\FSecure\BearerTokenMiddlewareGuzzleClientFactory;
+use SandwaveIo\FSecure\Client\AuthClientInterface;
 
 use function PHPUnit\Framework\assertInstanceOf;
 
@@ -16,10 +16,10 @@ final class BearerTokenMiddlewareRestClientFactoryTest extends TestCase
 {
     public function testCreate(): void
     {
-        $clientFactory = new BearerTokenMiddlewareRestClientFactory(
+        $clientFactory = new BearerTokenMiddlewareGuzzleClientFactory(
             'url',
             new BearerTokenMiddleware(
-                $this->createMock(AuthRestClientInterface::class)
+                $this->createMock(AuthClientInterface::class)
             )
         );
         $client = $clientFactory->create();

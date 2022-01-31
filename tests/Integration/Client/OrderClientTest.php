@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SandwaveIo\FSecure\Tests\Integration\Client;
 
-use GuzzleHttp\Client;
+use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -12,7 +12,7 @@ use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
 use JMS\Serializer\Naming\SerializedNameAnnotationStrategy;
 use JMS\Serializer\SerializerBuilder;
 use PHPUnit\Framework\TestCase;
-use SandwaveIo\FSecure\Client\RestClient;
+use SandwaveIo\FSecure\Client\Client;
 use SandwaveIo\FSecure\Entity\NewOrder;
 use SandwaveIo\FSecure\Entity\SuspendOrder;
 use SandwaveIo\FSecure\Exception\BadRequestException;
@@ -38,7 +38,7 @@ final class OrderClientTest extends TestCase
             [new Response(200, [], $json)]
         );
         $stack = HandlerStack::create($mockHandler);
-        $guzzle = new Client(['handler' => $stack]);
+        $guzzle = new GuzzleClient(['handler' => $stack]);
 
         $serializerBuilder = new SerializerBuilder();
         $serializer = $serializerBuilder->setPropertyNamingStrategy(
@@ -47,7 +47,7 @@ final class OrderClientTest extends TestCase
             )
         )->build();
 
-        $restClient = new RestClient($guzzle, $serializer, $this->exceptionConvertor);
+        $restClient = new Client($guzzle, $serializer, $this->exceptionConvertor);
 
         $fsecureClient = new FsecureClient($restClient);
         $orderCollection = $fsecureClient->getOrderClient()->get();
@@ -88,7 +88,7 @@ final class OrderClientTest extends TestCase
             [new Response(400, [], $json)]
         );
         $stack = HandlerStack::create($mockHandler);
-        $guzzle = new Client(['handler' => $stack]);
+        $guzzle = new GuzzleClient(['handler' => $stack]);
 
         $serializerBuilder = new SerializerBuilder();
         $serializer = $serializerBuilder->setPropertyNamingStrategy(
@@ -97,7 +97,7 @@ final class OrderClientTest extends TestCase
             )
         )->build();
 
-        $restClient = new RestClient($guzzle, $serializer, $this->exceptionConvertor);
+        $restClient = new Client($guzzle, $serializer, $this->exceptionConvertor);
 
         $newOrder = new NewOrder(1111111111, 'Test order', 123);
 
@@ -113,7 +113,7 @@ final class OrderClientTest extends TestCase
             [new Response(200, [], $json)]
         );
         $stack = HandlerStack::create($mockHandler);
-        $guzzle = new Client(['handler' => $stack]);
+        $guzzle = new GuzzleClient(['handler' => $stack]);
 
         $serializerBuilder = new SerializerBuilder();
         $serializer = $serializerBuilder->setPropertyNamingStrategy(
@@ -122,7 +122,7 @@ final class OrderClientTest extends TestCase
             )
         )->build();
 
-        $restClient = new RestClient($guzzle, $serializer, $this->exceptionConvertor);
+        $restClient = new Client($guzzle, $serializer, $this->exceptionConvertor);
 
         $newOrder = new NewOrder(1, 'Test order', 123);
 
@@ -162,7 +162,7 @@ final class OrderClientTest extends TestCase
             [new Response(400, [], $jsonResponse)]
         );
         $stack = HandlerStack::create($mockHandler);
-        $guzzle = new Client(['handler' => $stack]);
+        $guzzle = new GuzzleClient(['handler' => $stack]);
 
         $serializerBuilder = new SerializerBuilder();
         $serializer = $serializerBuilder->setPropertyNamingStrategy(
@@ -171,7 +171,7 @@ final class OrderClientTest extends TestCase
             )
         )->build();
 
-        $restClient = new RestClient($guzzle, $serializer, $this->exceptionConvertor);
+        $restClient = new Client($guzzle, $serializer, $this->exceptionConvertor);
 
         $fsecureClient = new FsecureClient($restClient);
         $fsecureClient->getOrderClient()->suspend(new SuspendOrder());
@@ -185,7 +185,7 @@ final class OrderClientTest extends TestCase
             [new Response(200, [], $jsonResponse)]
         );
         $stack = HandlerStack::create($mockHandler);
-        $guzzle = new Client(['handler' => $stack]);
+        $guzzle = new GuzzleClient(['handler' => $stack]);
 
         $serializerBuilder = new SerializerBuilder();
         $serializer = $serializerBuilder->setPropertyNamingStrategy(
@@ -194,7 +194,7 @@ final class OrderClientTest extends TestCase
             )
         )->build();
 
-        $restClient = new RestClient($guzzle, $serializer, $this->exceptionConvertor);
+        $restClient = new Client($guzzle, $serializer, $this->exceptionConvertor);
 
         $fsecureClient = new FsecureClient($restClient);
         $suspendOrder = new SuspendOrder();
@@ -214,7 +214,7 @@ final class OrderClientTest extends TestCase
             [new Response(200, [], $jsonResponse)]
         );
         $stack = HandlerStack::create($mockHandler);
-        $guzzle = new Client(['handler' => $stack]);
+        $guzzle = new GuzzleClient(['handler' => $stack]);
 
         $serializerBuilder = new SerializerBuilder();
         $serializer = $serializerBuilder->setPropertyNamingStrategy(
@@ -223,7 +223,7 @@ final class OrderClientTest extends TestCase
             )
         )->build();
 
-        $restClient = new RestClient($guzzle, $serializer, $this->exceptionConvertor);
+        $restClient = new Client($guzzle, $serializer, $this->exceptionConvertor);
 
         $fsecureClient = new FsecureClient($restClient);
         $suspendOrder = new SuspendOrder();

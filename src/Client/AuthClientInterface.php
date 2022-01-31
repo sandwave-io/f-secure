@@ -7,7 +7,7 @@ namespace SandwaveIo\FSecure\Client;
 use SandwaveIo\FSecure\Entity\AccessToken;
 use SandwaveIo\FSecure\Exception\FsecureException;
 
-interface AuthRestClientInterface
+interface AuthClientInterface
 {
     /**
      * @throws FsecureException

@@ -8,7 +8,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
 
-final class BearerTokenMiddlewareRestClientFactory implements RestClientFactoryInterface
+final class BearerTokenMiddlewareGuzzleClientFactory implements GuzzleClientFactoryInterface
 {
     private string $url;
 

@@ -6,13 +6,13 @@ namespace SandwaveIo\FSecure\Tests\Unit;
 
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
-use SandwaveIo\FSecure\RestClientFactory;
+use SandwaveIo\FSecure\GuzzleClientFactory;
 
-final class RestClientFactoryTest extends TestCase
+final class GuzzleClientFactoryTest extends TestCase
 {
     public function testCreate(): void
     {
-        $clientFactory = new RestClientFactory('url');
+        $clientFactory = new GuzzleClientFactory('url');
         $client = $clientFactory->create();
 
         self::assertInstanceOf(Client::class, $client);

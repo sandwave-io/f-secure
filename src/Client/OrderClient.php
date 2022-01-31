@@ -16,9 +16,9 @@ final class OrderClient
     private const CREATE_ORDER = 'licenses/new_order';
     private const SUSPEND_ORDER = 'licenses/suspend_order';
 
-    private RestClientInterface $client;
+    private ClientInterface $client;
 
-    public function __construct(RestClientInterface $client)
+    public function __construct(ClientInterface $client)
     {
         $this->client = $client;
     }

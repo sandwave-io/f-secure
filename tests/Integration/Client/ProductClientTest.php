@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SandwaveIo\FSecure\Tests\Integration\Client;
 
-use GuzzleHttp\Client;
+use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -12,7 +12,7 @@ use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
 use JMS\Serializer\Naming\SerializedNameAnnotationStrategy;
 use JMS\Serializer\SerializerBuilder;
 use PHPUnit\Framework\TestCase;
-use SandwaveIo\FSecure\Client\RestClient;
+use SandwaveIo\FSecure\Client\Client;
 use SandwaveIo\FSecure\FsecureClient;
 use SandwaveIo\FSecure\Service\ThrowableConvertor;
 
@@ -26,7 +26,7 @@ final class ProductClientTest extends TestCase
             [new Response(200, [], $json)]
         );
         $stack = HandlerStack::create($mockHandler);
-        $guzzle = new Client(['handler' => $stack]);
+        $guzzle = new GuzzleClient(['handler' => $stack]);
 
         $serializerBuilder = new SerializerBuilder();
         $serializer = $serializerBuilder->setPropertyNamingStrategy(
@@ -35,7 +35,7 @@ final class ProductClientTest extends TestCase
             )
         )->build();
 
-        $restClient = new RestClient($guzzle, $serializer, new ThrowableConvertor());
+        $restClient = new Client($guzzle, $serializer, new ThrowableConvertor());
 
         $fsecureClient = new FsecureClient($restClient);
         $productCollection = $fsecureClient->getProductClient()->get();

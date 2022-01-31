@@ -6,7 +6,7 @@ namespace SandwaveIo\FSecure\Client;
 
 use SandwaveIo\FSecure\Exception\FsecureException;
 
-interface RestClientInterface
+interface ClientInterface
 {
     /**
      * @template T of object
