@@ -21,7 +21,7 @@ use SandwaveIo\FSecure\Exception\UnauthorizedException;
 use SandwaveIo\FSecure\Exception\UnknownException;
 use SandwaveIo\FSecure\Service\ThrowableConvertor;
 
-final class ExceptionConvertorTest extends TestCase
+final class ThrowableConvertorTest extends TestCase
 {
     public function testConvertRequestException(): void
     {

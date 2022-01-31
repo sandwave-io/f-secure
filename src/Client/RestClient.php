@@ -52,8 +52,8 @@ final class RestClient implements RestClientInterface
     /**
      * @template T
      *
-     * @param string $url
-     * @param object $data
+     * @param string          $url
+     * @param object          $data
      * @param class-string<T> $returnType
      *
      * @return T
@@ -75,6 +75,7 @@ final class RestClient implements RestClientInterface
 
     /**
      * @param string $url
+     *
      * @return string
      */
     private function get(string $url): string
@@ -85,12 +86,13 @@ final class RestClient implements RestClientInterface
     }
 
     /**
-     * @param string $method
-     * @param string $url
+     * @param string               $method
+     * @param string               $url
      * @param array<string, mixed> $options
      *
-     * @return ResponseInterface
      * @throws FSecureException
+     *
+     * @return ResponseInterface
      */
     private function request(string $method, string $url, array $options = []): ResponseInterface
     {

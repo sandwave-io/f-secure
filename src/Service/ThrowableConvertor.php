@@ -23,6 +23,7 @@ final class ThrowableConvertor
 {
     /**
      * @param Throwable $exception
+     *
      * @return FsecureException
      */
     public function convert(Throwable $exception): FsecureException
@@ -30,7 +31,7 @@ final class ThrowableConvertor
         $message = $exception instanceof RequestException ? $this->convertMessage($exception) : $exception->getMessage(
         );
 
-        if(!$exception instanceof TransferException) {
+        if (! $exception instanceof TransferException) {
             return new UnknownException($message, 0, $exception);
         }
 

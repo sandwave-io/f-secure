@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace SandwaveIo\FSecure\Client;
 
-use Exception;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\RequestOptions;
 use JMS\Serializer\SerializerInterface;
 use SandwaveIo\FSecure\Entity\AccessToken;
