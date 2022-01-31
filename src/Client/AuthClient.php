@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SandwaveIo\FSecure\Client;
 
+use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\RequestOptions;
@@ -11,7 +12,8 @@ use JMS\Serializer\SerializerInterface;
 use SandwaveIo\FSecure\Entity\AccessToken;
 use SandwaveIo\FSecure\Exception\FsecureException;
 use GuzzleHttp\ClientInterface;
-use SandwaveIo\FSecure\Service\ExceptionConvertor;
+use SandwaveIo\FSecure\Service\ThrowableConvertor;
+use Throwable;
 
 final class AuthClient implements AuthRestClientInterface
 {
@@ -26,14 +28,14 @@ final class AuthClient implements AuthRestClientInterface
 
     private SerializerInterface $serializer;
 
-    private ExceptionConvertor $exceptionConvertor;
+    private ThrowableConvertor $exceptionConvertor;
 
     public function __construct(
         string $clientId,
         string $clientSecret,
         ClientInterface $client,
         SerializerInterface $serializer,
-        ExceptionConvertor $exceptionConvertor
+        ThrowableConvertor $exceptionConvertor
     ) {
         $this->client = $client;
         $this->clientId = $clientId;
@@ -43,7 +45,7 @@ final class AuthClient implements AuthRestClientInterface
     }
 
     /**
-     * @throws GuzzleException|FsecureException
+     * @throws FsecureException
      *
      * @return AccessToken
      */
@@ -63,7 +65,7 @@ final class AuthClient implements AuthRestClientInterface
                 ],
                 RequestOptions::CONNECT_TIMEOUT => self::REQUEST_TIMEOUT,
             ]);
-        } catch (TransferException $exception) {
+        } catch (Throwable $exception) {
             throw $this->exceptionConvertor->convert($exception);
         }
 

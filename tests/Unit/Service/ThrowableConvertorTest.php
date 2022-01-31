@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SandwaveIo\FSecure\Tests\Unit\Service;
 
+use Exception;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
@@ -18,13 +19,13 @@ use SandwaveIo\FSecure\Exception\ResourceNotFoundException;
 use SandwaveIo\FSecure\Exception\ServerException as FSecureServerException;
 use SandwaveIo\FSecure\Exception\UnauthorizedException;
 use SandwaveIo\FSecure\Exception\UnknownException;
-use SandwaveIo\FSecure\Service\ExceptionConvertor;
+use SandwaveIo\FSecure\Service\ThrowableConvertor;
 
 final class ExceptionConvertorTest extends TestCase
 {
     public function testConvertRequestException(): void
     {
-        $convertor = new ExceptionConvertor();
+        $convertor = new ThrowableConvertor();
         $resp = $convertor->convert(
             new RequestException(
                 'fake',
@@ -45,7 +46,7 @@ final class ExceptionConvertorTest extends TestCase
 
     public function testConvertRequestException2(): void
     {
-        $convertor = new ExceptionConvertor();
+        $convertor = new ThrowableConvertor();
         $resp = $convertor->convert(
             new RequestException(
                 'fake',
@@ -61,7 +62,7 @@ final class ExceptionConvertorTest extends TestCase
 
     public function testConvertConnectException(): void
     {
-        $convertor = new ExceptionConvertor();
+        $convertor = new ThrowableConvertor();
         $resp = $convertor->convert(
             new ConnectException(
                 'fake',
@@ -77,7 +78,7 @@ final class ExceptionConvertorTest extends TestCase
 
     public function testConvertTooManyRedirectsException(): void
     {
-        $convertor = new ExceptionConvertor();
+        $convertor = new ThrowableConvertor();
         $resp = $convertor->convert(
             new TooManyRedirectsException(
                 'fake',
@@ -93,7 +94,7 @@ final class ExceptionConvertorTest extends TestCase
 
     public function testConvertServerException(): void
     {
-        $convertor = new ExceptionConvertor();
+        $convertor = new ThrowableConvertor();
         $resp = $convertor->convert(
             new ServerException(
                 'fake',
@@ -112,7 +113,7 @@ final class ExceptionConvertorTest extends TestCase
 
     public function testConvertClientExceptionNotFound(): void
     {
-        $convertor = new ExceptionConvertor();
+        $convertor = new ThrowableConvertor();
         $resp = $convertor->convert(
             new ClientException(
                 'fake',
@@ -131,7 +132,7 @@ final class ExceptionConvertorTest extends TestCase
 
     public function testConvertClientExceptionUnauthorized(): void
     {
-        $convertor = new ExceptionConvertor();
+        $convertor = new ThrowableConvertor();
         $resp = $convertor->convert(
             new ClientException(
                 'fake',
@@ -150,7 +151,7 @@ final class ExceptionConvertorTest extends TestCase
 
     public function testConvertClientExceptionBadRequest(): void
     {
-        $convertor = new ExceptionConvertor();
+        $convertor = new ThrowableConvertor();
         $resp = $convertor->convert(
             new ClientException(
                 'fake',
@@ -165,5 +166,17 @@ final class ExceptionConvertorTest extends TestCase
         );
 
         self::assertInstanceOf(BadRequestException::class, $resp);
+    }
+
+    public function testConvertUnknownThrowable(): void
+    {
+        $convertor = new ThrowableConvertor();
+        $resp = $convertor->convert(
+            new Exception(
+                'fake',
+            )
+        );
+
+        self::assertInstanceOf(UnknownException::class, $resp);
     }
 }

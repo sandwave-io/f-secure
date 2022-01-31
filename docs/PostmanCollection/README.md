@@ -1,6 +1,6 @@
 # F-secure eDeal API collection for Postman
 
-[F-secure eDeal API.json](F-secure eDeal API.json) is a Postman collection stored in JSON format.
+[F-secure_eDeal_API.json](F-secure_eDeal_API.json) is a Postman collection stored in JSON format.
 
 ## Usage of the collection
 For basic usage of a collection (in Postman) you can see their own [manual](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/)

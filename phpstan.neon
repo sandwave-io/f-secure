@@ -12,3 +12,7 @@ parameters:
         classesAllowedToBeExtended:
             - RuntimeException
             - SandwaveIo\FSecure\Exception\FsecureException
+    disallowedFunctionCalls:
+        -
+            function: 'dump()'
+            message: 'use logger instead'

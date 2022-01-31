@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace SandwaveIo\FSecure\Service;
 
-use Exception;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\TooManyRedirectsException;
+use GuzzleHttp\Exception\TransferException;
 use SandwaveIo\FSecure\Exception\BadRequestException;
 use SandwaveIo\FSecure\Exception\FsecureException;
 use SandwaveIo\FSecure\Exception\NetworkException;
@@ -17,13 +17,22 @@ use SandwaveIo\FSecure\Exception\ResourceNotFoundException;
 use SandwaveIo\FSecure\Exception\ServerException as FSecureServerException;
 use SandwaveIo\FSecure\Exception\UnauthorizedException;
 use SandwaveIo\FSecure\Exception\UnknownException;
+use Throwable;
 
-final class ExceptionConvertor
+final class ThrowableConvertor
 {
-    public function convert(Exception $exception): FsecureException
+    /**
+     * @param Throwable $exception
+     * @return FsecureException
+     */
+    public function convert(Throwable $exception): FsecureException
     {
         $message = $exception instanceof RequestException ? $this->convertMessage($exception) : $exception->getMessage(
         );
+
+        if(!$exception instanceof TransferException) {
+            return new UnknownException($message, 0, $exception);
+        }
 
         if ($exception instanceof ConnectException || $exception instanceof TooManyRedirectsException) {
             return new NetworkException($message, 0, $exception);

@@ -18,16 +18,16 @@ use SandwaveIo\FSecure\Entity\SuspendOrder;
 use SandwaveIo\FSecure\Exception\BadRequestException;
 use SandwaveIo\FSecure\Exception\FsecureException;
 use SandwaveIo\FSecure\FsecureClient;
-use SandwaveIo\FSecure\Service\ExceptionConvertor;
+use SandwaveIo\FSecure\Service\ThrowableConvertor;
 
 final class OrderClientTest extends TestCase
 {
-    private ExceptionConvertor $exceptionConvertor;
+    private ThrowableConvertor $exceptionConvertor;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->exceptionConvertor = new ExceptionConvertor();
+        $this->exceptionConvertor = new ThrowableConvertor();
     }
 
     public function testGet(): void

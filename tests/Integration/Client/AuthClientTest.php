@@ -13,16 +13,16 @@ use JMS\Serializer\SerializerBuilder;
 use PHPUnit\Framework\TestCase;
 use SandwaveIo\FSecure\Client\AuthClient;
 use SandwaveIo\FSecure\Exception\FsecureException;
-use SandwaveIo\FSecure\Service\ExceptionConvertor;
+use SandwaveIo\FSecure\Service\ThrowableConvertor;
 
 final class AuthClientTest extends TestCase
 {
-    private ExceptionConvertor $exceptionConvertor;
+    private ThrowableConvertor $exceptionConvertor;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->exceptionConvertor = new ExceptionConvertor();
+        $this->exceptionConvertor = new ThrowableConvertor();
     }
 
     /**

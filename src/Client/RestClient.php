@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace SandwaveIo\FSecure\Client;
 
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\RequestOptions;
 use JMS\Serializer\SerializerInterface;
 use Psr\Http\Message\ResponseInterface;
 use SandwaveIo\FSecure\Exception\DeserializationException;
 use SandwaveIo\FSecure\Exception\FsecureException;
-use SandwaveIo\FSecure\Service\ExceptionConvertor;
+use SandwaveIo\FSecure\Service\ThrowableConvertor;
+use Throwable;
 
 final class RestClient implements RestClientInterface
 {
@@ -22,9 +21,9 @@ final class RestClient implements RestClientInterface
 
     private SerializerInterface $serializer;
 
-    private ExceptionConvertor $exceptionConvertor;
+    private ThrowableConvertor $exceptionConvertor;
 
-    public function __construct(ClientInterface $client, SerializerInterface $serializer, ExceptionConvertor $exceptionConvertor)
+    public function __construct(ClientInterface $client, SerializerInterface $serializer, ThrowableConvertor $exceptionConvertor)
     {
         $this->client = $client;
         $this->serializer = $serializer;
@@ -37,7 +36,7 @@ final class RestClient implements RestClientInterface
      * @param string          $url
      * @param class-string<T> $returnType
      *
-     * @throws FSecureException|GuzzleException
+     * @throws FSecureException
      *
      * @return T
      *
@@ -53,11 +52,9 @@ final class RestClient implements RestClientInterface
     /**
      * @template T
      *
-     * @param string          $url
-     * @param object          $data
+     * @param string $url
+     * @param object $data
      * @param class-string<T> $returnType
-     *
-     * @throws GuzzleException
      *
      * @return T
      */
@@ -77,7 +74,8 @@ final class RestClient implements RestClientInterface
     }
 
     /**
-     * @throws GuzzleException
+     * @param string $url
+     * @return string
      */
     private function get(string $url): string
     {
@@ -87,20 +85,18 @@ final class RestClient implements RestClientInterface
     }
 
     /**
-     * @param string               $method
-     * @param string               $url
+     * @param string $method
+     * @param string $url
      * @param array<string, mixed> $options
      *
-     * @throws FSecureException|GuzzleException
-     *
      * @return ResponseInterface
-     *
+     * @throws FSecureException
      */
     private function request(string $method, string $url, array $options = []): ResponseInterface
     {
         try {
             $response = $this->client->request($method, $url, array_merge($options, $this->getRequestOptions()));
-        } catch (TransferException $exception) {
+        } catch (Throwable $exception) {
             throw $this->exceptionConvertor->convert($exception);
         }
 

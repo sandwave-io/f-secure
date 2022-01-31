@@ -40,7 +40,7 @@ $authClient = new AuthClient(
     $clientSecret,
     $factory->create(),
     $serializerBuilder->build(),
-    new SandwaveIo\FSecure\Service\ExceptionConvertor()
+    new SandwaveIo\FSecure\Service\ThrowableConvertor()
 );
 
 $factory = new BearerTokenMiddlewareRestClientFactory(
@@ -56,7 +56,7 @@ $restClient = new RestClient(
             new IdenticalPropertyNamingStrategy()
         )
     )->build(),
-    new SandwaveIo\FSecure\Service\ExceptionConvertor()
+    new SandwaveIo\FSecure\Service\ThrowableConvertor()
 );
 
 $fsecureApi = new FsecureClient($restClient);

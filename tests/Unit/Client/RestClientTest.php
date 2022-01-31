@@ -9,7 +9,7 @@ use JMS\Serializer\SerializerInterface;
 use PHPUnit\Framework\TestCase;
 use SandwaveIo\FSecure\Client\RestClient;
 use SandwaveIo\FSecure\Exception\DeserializationException;
-use SandwaveIo\FSecure\Service\ExceptionConvertor;
+use SandwaveIo\FSecure\Service\ThrowableConvertor;
 
 final class RestClientTest extends TestCase
 {
@@ -18,7 +18,7 @@ final class RestClientTest extends TestCase
         $client = new RestClient(
             $this->createMock(ClientInterface::class),
             $this->createMock(SerializerInterface::class),
-            new ExceptionConvertor()
+            new ThrowableConvertor()
         );
 
         /** @var class-string $class */
