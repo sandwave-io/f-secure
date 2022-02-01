@@ -1,6 +1,6 @@
 {
   "name": "sandwave-io/f-secure",
-  "description": "A http client for the F-secure REST API.",
+  "description": "A HTTP client for the F-Secure API.",
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -16,7 +16,7 @@
   "require": {
     "php": "^7.4|^8.0",
     "ext-json": "*",
-    "guzzlehttp/guzzle": "^7.4",
+    "guzzlehttp/guzzle": "^6.2.0|^7.4",
     "jms/serializer-bundle": "^4.0"
   },
   "require-dev": {
