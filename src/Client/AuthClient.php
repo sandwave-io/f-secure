@@ -8,7 +8,7 @@ use GuzzleHttp\RequestOptions;
 use JMS\Serializer\SerializerInterface;
 use SandwaveIo\FSecure\Entity\AccessToken;
 use SandwaveIo\FSecure\Exception\DeserializationException;
-use SandwaveIo\FSecure\Exception\FsecureException;
+use SandwaveIo\FSecure\Exception\FSecureException;
 use GuzzleHttp\ClientInterface;
 use SandwaveIo\FSecure\Service\ThrowableConvertor;
 use Throwable;
@@ -43,9 +43,10 @@ final class AuthClient implements AuthClientInterface
     }
 
     /**
-     * @throws FsecureException
+     *@throws FSecureException
      *
      * @return AccessToken
+     *
      */
     public function getToken(): AccessToken
     {

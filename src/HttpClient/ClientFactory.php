@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SandwaveIo\FSecure;
+namespace SandwaveIo\FSecure\HttpClient;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 
-final class GuzzleClientFactory implements GuzzleClientFactoryInterface
+final class ClientFactory implements ClientFactoryInterface
 {
     private string $url;
 

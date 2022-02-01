@@ -11,7 +11,7 @@ parameters:
     ergebnis:
         classesAllowedToBeExtended:
             - RuntimeException
-            - SandwaveIo\FSecure\Exception\FsecureException
+            - SandwaveIo\FSecure\Exception\FSecureException
     disallowedFunctionCalls:
         -
             function: 'dump()'

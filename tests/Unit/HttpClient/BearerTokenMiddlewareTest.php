@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SandwaveIo\FSecure\Tests\Unit;
+namespace SandwaveIo\FSecure\Tests\Unit\HttpClient;
 
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use SandwaveIo\FSecure\BearerTokenMiddleware;
 use SandwaveIo\FSecure\Client\AuthClientInterface;
 use SandwaveIo\FSecure\Entity\AccessToken;
+use SandwaveIo\FSecure\HttpClient\BearerTokenMiddleware;
 
 final class BearerTokenMiddlewareTest extends TestCase
 {

@@ -28,7 +28,7 @@ final class ProductClientTest extends TestCase
             [new Response(200, [], $json)]
         );
         $stack = HandlerStack::create($mockHandler);
-        $guzzleClient = new GuzzleClient(['handler' => $stack]);
+        $httpClient = new GuzzleClient(['handler' => $stack]);
 
         $serializerBuilder = new SerializerBuilder();
         $serializer = $serializerBuilder->setPropertyNamingStrategy(
@@ -37,7 +37,7 @@ final class ProductClientTest extends TestCase
             )
         )->build();
 
-        $client = new Client($guzzleClient, $serializer, new ThrowableConvertor());
+        $client = new Client($httpClient, $serializer, new ThrowableConvertor());
 
         $productClient = new ProductClient($client);
         $productCollection = $productClient->get();
@@ -74,9 +74,9 @@ final class ProductClientTest extends TestCase
             [new Response(200, [], '{}')]
         );
         $stack = HandlerStack::create($mockHandler);
-        $guzzleClient = new GuzzleClient(['handler' => $stack]);
+        $httpClient = new GuzzleClient(['handler' => $stack]);
 
-        $client = new Client($guzzleClient, $serializeMock, new ThrowableConvertor());
+        $client = new Client($httpClient, $serializeMock, new ThrowableConvertor());
 
         $productClient = new ProductClient($client);
         $productClient->get();

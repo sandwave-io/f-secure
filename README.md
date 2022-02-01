@@ -18,13 +18,13 @@ require "vendor/autoload.php";
 use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
 use JMS\Serializer\Naming\SerializedNameAnnotationStrategy;
 use JMS\Serializer\SerializerBuilder;
-use SandwaveIo\FSecure\BearerTokenMiddleware;
-use SandwaveIo\FSecure\BearerTokenMiddlewareGuzzleClientFactory;
 use SandwaveIo\FSecure\Client\Client;
 use SandwaveIo\FSecure\Client\AuthClient;
 use SandwaveIo\FSecure\Client\OrderClient;
 use SandwaveIo\FSecure\Client\ProductClient;
-use SandwaveIo\FSecure\GuzzleClientFactory;
+use SandwaveIo\FSecure\HttpClient\AuthenticatedClientFactory;
+use SandwaveIo\FSecure\HttpClient\BearerTokenMiddleware;
+use SandwaveIo\FSecure\HttpClient\ClientFactory;
 use SandwaveIo\FSecure\Service\ThrowableConvertor;
 
 $apiEndpoint = 'https://vip.f-secure.com/api/v2/';
@@ -35,19 +35,19 @@ $clientSecret = 'client_secret';
 $auth = new AuthClient(
     $clientId,
     $clientSecret,
-    (new GuzzleClientFactory($apiEndpoint))->create(),
+    (new ClientFactory($apiEndpoint))->create(),
     (new SerializerBuilder())->build(),
     new ThrowableConvertor()
 );
 
 // use AuthClient to create a GuzzleClient binded with middleware for handling the bearer token
-$guzzleClient = (new BearerTokenMiddlewareGuzzleClientFactory(
+$httpClient = (new AuthenticatedClientFactory(
     $apiEndpoint, new BearerTokenMiddleware($auth)
 ))->create();
 
 // create client by injecting the guzzleclient
 $client = new Client(
-    $guzzleClient,
+    $httpClient,
     (new SerializerBuilder())->setPropertyNamingStrategy(
         new SerializedNameAnnotationStrategy(
             new IdenticalPropertyNamingStrategy()

@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace SandwaveIo\FSecure\Exception;
 
-final class UnknownException extends FsecureException
+final class UnknownException extends FSecureException
 {
 }

@@ -9,7 +9,7 @@ use GuzzleHttp\RequestOptions;
 use JMS\Serializer\SerializerInterface;
 use Psr\Http\Message\ResponseInterface;
 use SandwaveIo\FSecure\Exception\DeserializationException;
-use SandwaveIo\FSecure\Exception\FsecureException;
+use SandwaveIo\FSecure\Exception\FSecureException;
 use SandwaveIo\FSecure\Service\ThrowableConvertor;
 use Throwable;
 

@@ -19,7 +19,7 @@ use SandwaveIo\FSecure\Entity\NewOrder;
 use SandwaveIo\FSecure\Entity\SuspendOrder;
 use SandwaveIo\FSecure\Exception\BadRequestException;
 use SandwaveIo\FSecure\Exception\DeserializationException;
-use SandwaveIo\FSecure\Exception\FsecureException;
+use SandwaveIo\FSecure\Exception\FSecureException;
 use SandwaveIo\FSecure\Service\ThrowableConvertor;
 
 final class OrderClientTest extends TestCase
@@ -40,7 +40,7 @@ final class OrderClientTest extends TestCase
             [new Response(200, [], $json)]
         );
         $stack = HandlerStack::create($mockHandler);
-        $guzzleClient = new GuzzleClient(['handler' => $stack]);
+        $httpClient = new GuzzleClient(['handler' => $stack]);
 
         $serializerBuilder = new SerializerBuilder();
         $serializer = $serializerBuilder->setPropertyNamingStrategy(
@@ -49,7 +49,7 @@ final class OrderClientTest extends TestCase
             )
         )->build();
 
-        $client = new Client($guzzleClient, $serializer, $this->exceptionConvertor);
+        $client = new Client($httpClient, $serializer, $this->exceptionConvertor);
 
         $orderClient = new OrderClient($client);
         $orderCollection = $orderClient->get();
@@ -83,14 +83,14 @@ final class OrderClientTest extends TestCase
 
     public function testCreateInvalidVariationId(): void
     {
-        $this->expectException(FsecureException::class);
+        $this->expectException(FSecureException::class);
         $json = (string) file_get_contents(__DIR__ . '/../Data/Response/NewOrderInvalidVariationId.json');
 
         $mockHandler = new MockHandler(
             [new Response(400, [], $json)]
         );
         $stack = HandlerStack::create($mockHandler);
-        $guzzleClient = new GuzzleClient(['handler' => $stack]);
+        $httpClient = new GuzzleClient(['handler' => $stack]);
 
         $serializerBuilder = new SerializerBuilder();
         $serializer = $serializerBuilder->setPropertyNamingStrategy(
@@ -99,7 +99,7 @@ final class OrderClientTest extends TestCase
             )
         )->build();
 
-        $client = new Client($guzzleClient, $serializer, $this->exceptionConvertor);
+        $client = new Client($httpClient, $serializer, $this->exceptionConvertor);
 
         $newOrder = new NewOrder(1111111111, 'Test order', 123);
 
@@ -115,7 +115,7 @@ final class OrderClientTest extends TestCase
             [new Response(200, [], $json)]
         );
         $stack = HandlerStack::create($mockHandler);
-        $guzzleClient = new GuzzleClient(['handler' => $stack]);
+        $httpClient = new GuzzleClient(['handler' => $stack]);
 
         $serializerBuilder = new SerializerBuilder();
         $serializer = $serializerBuilder->setPropertyNamingStrategy(
@@ -124,7 +124,7 @@ final class OrderClientTest extends TestCase
             )
         )->build();
 
-        $client = new Client($guzzleClient, $serializer, $this->exceptionConvertor);
+        $client = new Client($httpClient, $serializer, $this->exceptionConvertor);
 
         $newOrder = new NewOrder(1, 'Test order', 123);
 
@@ -164,7 +164,7 @@ final class OrderClientTest extends TestCase
             [new Response(400, [], $jsonResponse)]
         );
         $stack = HandlerStack::create($mockHandler);
-        $guzzleClient = new GuzzleClient(['handler' => $stack]);
+        $httpClient = new GuzzleClient(['handler' => $stack]);
 
         $serializerBuilder = new SerializerBuilder();
         $serializer = $serializerBuilder->setPropertyNamingStrategy(
@@ -173,7 +173,7 @@ final class OrderClientTest extends TestCase
             )
         )->build();
 
-        $client = new Client($guzzleClient, $serializer, $this->exceptionConvertor);
+        $client = new Client($httpClient, $serializer, $this->exceptionConvertor);
 
         $orderClient = new OrderClient($client);
         $orderClient->suspend(new SuspendOrder());
@@ -187,7 +187,7 @@ final class OrderClientTest extends TestCase
             [new Response(200, [], $jsonResponse)]
         );
         $stack = HandlerStack::create($mockHandler);
-        $guzzleClient = new GuzzleClient(['handler' => $stack]);
+        $httpClient = new GuzzleClient(['handler' => $stack]);
 
         $serializerBuilder = new SerializerBuilder();
         $serializer = $serializerBuilder->setPropertyNamingStrategy(
@@ -196,7 +196,7 @@ final class OrderClientTest extends TestCase
             )
         )->build();
 
-        $client = new Client($guzzleClient, $serializer, $this->exceptionConvertor);
+        $client = new Client($httpClient, $serializer, $this->exceptionConvertor);
         $suspendOrder = new SuspendOrder();
         $suspendOrder->licenseKey = 'XXXX-YYYY-ZZZZ-AAAA';
 
@@ -216,7 +216,7 @@ final class OrderClientTest extends TestCase
             [new Response(200, [], $jsonResponse)]
         );
         $stack = HandlerStack::create($mockHandler);
-        $guzzleClient = new GuzzleClient(['handler' => $stack]);
+        $httpClient = new GuzzleClient(['handler' => $stack]);
 
         $serializerBuilder = new SerializerBuilder();
         $serializer = $serializerBuilder->setPropertyNamingStrategy(
@@ -225,7 +225,7 @@ final class OrderClientTest extends TestCase
             )
         )->build();
 
-        $client = new Client($guzzleClient, $serializer, $this->exceptionConvertor);
+        $client = new Client($httpClient, $serializer, $this->exceptionConvertor);
 
         $suspendOrder = new SuspendOrder();
         $suspendOrder->customerReference = 'customer1';
@@ -259,9 +259,9 @@ final class OrderClientTest extends TestCase
             [new Response(200, [], '{}')]
         );
         $stack = HandlerStack::create($mockHandler);
-        $guzzleClient = new GuzzleClient(['handler' => $stack]);
+        $httpClient = new GuzzleClient(['handler' => $stack]);
 
-        $client = new Client($guzzleClient, $serializeMock, new ThrowableConvertor());
+        $client = new Client($httpClient, $serializeMock, new ThrowableConvertor());
 
         $productClient = new OrderClient($client);
         $productClient->create(new NewOrder(1, 'fake', 1));

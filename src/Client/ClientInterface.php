@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SandwaveIo\FSecure\Client;
 
-use SandwaveIo\FSecure\Exception\FsecureException;
+use SandwaveIo\FSecure\Exception\FSecureException;
 
 interface ClientInterface
 {
@@ -14,9 +14,10 @@ interface ClientInterface
      * @param string          $url
      * @param class-string<T> $returnType
      *
-     * @throws FsecureException
+     * @throws FSecureException
      *
      * @return T
+     *
      */
     public function getEntity(string $url, string $returnType): object;
 

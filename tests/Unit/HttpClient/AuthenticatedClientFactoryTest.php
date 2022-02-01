@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace SandwaveIo\FSecure\Tests\Unit;
+namespace SandwaveIo\FSecure\Tests\Unit\HttpClient;
 
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
-use SandwaveIo\FSecure\BearerTokenMiddleware;
-use SandwaveIo\FSecure\BearerTokenMiddlewareGuzzleClientFactory;
 use SandwaveIo\FSecure\Client\AuthClientInterface;
+use SandwaveIo\FSecure\HttpClient\AuthenticatedClientFactory;
+use SandwaveIo\FSecure\HttpClient\BearerTokenMiddleware;
 
 use function PHPUnit\Framework\assertInstanceOf;
 
-final class BearerTokenMiddlewareGuzzleClientFactoryTest extends TestCase
+final class AuthenticatedClientFactoryTest extends TestCase
 {
     public function testCreate(): void
     {
-        $clientFactory = new BearerTokenMiddlewareGuzzleClientFactory(
+        $clientFactory = new AuthenticatedClientFactory(
             'url',
             new BearerTokenMiddleware(
                 $this->createMock(AuthClientInterface::class)

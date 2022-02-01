@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SandwaveIo\FSecure;
+namespace SandwaveIo\FSecure\HttpClient;
 
 use Closure;
 use Psr\Http\Message\RequestInterface;

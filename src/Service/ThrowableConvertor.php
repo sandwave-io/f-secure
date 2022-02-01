@@ -11,7 +11,7 @@ use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\TooManyRedirectsException;
 use GuzzleHttp\Exception\TransferException;
 use SandwaveIo\FSecure\Exception\BadRequestException;
-use SandwaveIo\FSecure\Exception\FsecureException;
+use SandwaveIo\FSecure\Exception\FSecureException;
 use SandwaveIo\FSecure\Exception\NetworkException;
 use SandwaveIo\FSecure\Exception\ResourceNotFoundException;
 use SandwaveIo\FSecure\Exception\ServerException as FSecureServerException;
@@ -24,9 +24,9 @@ final class ThrowableConvertor
     /**
      * @param Throwable $exception
      *
-     * @return FsecureException
+     * @return FSecureException
      */
-    public function convert(Throwable $exception): FsecureException
+    public function convert(Throwable $exception): FSecureException
     {
         $message = $exception instanceof RequestException ? $this->convertMessage($exception) : $exception->getMessage(
         );

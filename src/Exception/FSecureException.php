@@ -6,6 +6,6 @@ namespace SandwaveIo\FSecure\Exception;
 
 use RuntimeException;
 
-abstract class FsecureException extends RuntimeException
+abstract class FSecureException extends RuntimeException
 {
 }

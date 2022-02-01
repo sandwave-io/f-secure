@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SandwaveIo\FSecure;
+namespace SandwaveIo\FSecure\HttpClient;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
 
-final class BearerTokenMiddlewareGuzzleClientFactory implements GuzzleClientFactoryInterface
+final class AuthenticatedClientFactory implements ClientFactoryInterface
 {
     private string $url;
 
