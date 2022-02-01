@@ -11,9 +11,11 @@ use GuzzleHttp\Psr7\Response;
 use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
 use JMS\Serializer\Naming\SerializedNameAnnotationStrategy;
 use JMS\Serializer\SerializerBuilder;
+use JMS\Serializer\SerializerInterface;
 use PHPUnit\Framework\TestCase;
 use SandwaveIo\FSecure\Client\Client;
-use SandwaveIo\FSecure\FsecureClient;
+use SandwaveIo\FSecure\Client\ProductClient;
+use SandwaveIo\FSecure\Exception\DeserializationException;
 use SandwaveIo\FSecure\Service\ThrowableConvertor;
 
 final class ProductClientTest extends TestCase
@@ -26,7 +28,7 @@ final class ProductClientTest extends TestCase
             [new Response(200, [], $json)]
         );
         $stack = HandlerStack::create($mockHandler);
-        $guzzle = new GuzzleClient(['handler' => $stack]);
+        $guzzleClient = new GuzzleClient(['handler' => $stack]);
 
         $serializerBuilder = new SerializerBuilder();
         $serializer = $serializerBuilder->setPropertyNamingStrategy(
@@ -35,10 +37,11 @@ final class ProductClientTest extends TestCase
             )
         )->build();
 
-        $restClient = new Client($guzzle, $serializer, new ThrowableConvertor());
+        $client = new Client($guzzleClient, $serializer, new ThrowableConvertor());
 
-        $fsecureClient = new FsecureClient($restClient);
-        $productCollection = $fsecureClient->getProductClient()->get();
+        $productClient = new ProductClient($client);
+        $productCollection = $productClient->get();
+
         $firstProduct = $productCollection->items[0];
 
         self::assertCount(8, $productCollection->items);
@@ -57,5 +60,25 @@ final class ProductClientTest extends TestCase
         self::assertSame('', $firstProduct->productLine);
         self::assertSame('F-Secure TOTAL Recurring', $firstProduct->productTitle);
         self::assertSame('en', $firstProduct->language);
+    }
+
+    public function testGetDeserializeException(): void
+    {
+        $this->expectException(DeserializationException::class);
+        $serializeMock = $this->createMock(SerializerInterface::class);
+        $serializeMock->expects(self::once())
+            ->method('deserialize')
+            ->willReturn([]);
+
+        $mockHandler = new MockHandler(
+            [new Response(200, [], '{}')]
+        );
+        $stack = HandlerStack::create($mockHandler);
+        $guzzleClient = new GuzzleClient(['handler' => $stack]);
+
+        $client = new Client($guzzleClient, $serializeMock, new ThrowableConvertor());
+
+        $productClient = new ProductClient($client);
+        $productClient->get();
     }
 }

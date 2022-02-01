@@ -22,7 +22,8 @@ use SandwaveIo\FSecure\BearerTokenMiddleware;
 use SandwaveIo\FSecure\BearerTokenMiddlewareGuzzleClientFactory;
 use SandwaveIo\FSecure\Client\Client;
 use SandwaveIo\FSecure\Client\AuthClient;
-use SandwaveIo\FSecure\FsecureClient;
+use SandwaveIo\FSecure\Client\OrderClient;
+use SandwaveIo\FSecure\Client\ProductClient;
 use SandwaveIo\FSecure\GuzzleClientFactory;
 use SandwaveIo\FSecure\Service\ThrowableConvertor;
 
@@ -39,12 +40,12 @@ $auth = new AuthClient(
     new ThrowableConvertor()
 );
 
-// use AuthClient to create a guzzleclient binded with middleware for handling the bearer token
+// use AuthClient to create a GuzzleClient binded with middleware for handling the bearer token
 $guzzleClient = (new BearerTokenMiddlewareGuzzleClientFactory(
     $apiEndpoint, new BearerTokenMiddleware($auth)
 ))->create();
 
-// create client by passing by injecting the guzzleclient
+// create client by injecting the guzzleclient
 $client = new Client(
     $guzzleClient,
     (new SerializerBuilder())->setPropertyNamingStrategy(
@@ -55,9 +56,13 @@ $client = new Client(
     new ThrowableConvertor()
 );
 
-// use client to create FsecureClient
-$fsecureApi = new FsecureClient($client);
-$result = $fsecureApi->getProductClient()->get();
+// use client to create ProductClient
+$productClient = new ProductClient($client);
+$productCollection = $productClient->get();
+
+// or use client to create OrderClient
+$orderClient = new OrderClient($client);
+$orderCollection = $orderClient->get();
 ```
 
 ## How to contribute

@@ -10,8 +10,10 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use JMS\Serializer\SerializerBuilder;
+use JMS\Serializer\SerializerInterface;
 use PHPUnit\Framework\TestCase;
 use SandwaveIo\FSecure\Client\AuthClient;
+use SandwaveIo\FSecure\Exception\DeserializationException;
 use SandwaveIo\FSecure\Exception\FsecureException;
 use SandwaveIo\FSecure\Service\ThrowableConvertor;
 
@@ -36,7 +38,7 @@ final class AuthClientTest extends TestCase
             [new Response(200, [], $json)]
         );
         $stack = HandlerStack::create($mockHandler);
-        $guzzle = new Client(['handler' => $stack]);
+        $guzzleClient = new Client(['handler' => $stack]);
 
         $serializerBuilder = new SerializerBuilder();
         $serializer = $serializerBuilder->build();
@@ -44,9 +46,9 @@ final class AuthClientTest extends TestCase
         $clientId = 'clientId';
         $clientSecret = 'clientSecret';
 
-        $restClient = new AuthClient($clientId, $clientSecret, $guzzle, $serializer, $this->exceptionConvertor);
+        $client = new AuthClient($clientId, $clientSecret, $guzzleClient, $serializer, $this->exceptionConvertor);
 
-        $token = $restClient->getToken();
+        $token = $client->getToken();
 
         self::assertSame('60048a266cc74468b9bdb574f12d4555cbefb3db', $token->accessToken);
         self::assertSame('Bearer', $token->tokenType);
@@ -64,7 +66,7 @@ final class AuthClientTest extends TestCase
             [new Response(400, [], $json)]
         );
         $stack = HandlerStack::create($mockHandler);
-        $guzzle = new Client(['handler' => $stack]);
+        $guzzleClient = new Client(['handler' => $stack]);
 
         $serializerBuilder = new SerializerBuilder();
         $serializer = $serializerBuilder->build();
@@ -72,8 +74,27 @@ final class AuthClientTest extends TestCase
         $clientId = 'clientId';
         $clientSecret = 'clientSecret';
 
-        $restClient = new AuthClient($clientId, $clientSecret, $guzzle, $serializer, $this->exceptionConvertor);
+        $client = new AuthClient($clientId, $clientSecret, $guzzleClient, $serializer, $this->exceptionConvertor);
 
-        $restClient->getToken();
+        $client->getToken();
+    }
+
+    public function testGetTokenDeserializeException(): void
+    {
+        $this->expectException(DeserializationException::class);
+        $serializeMock = $this->createMock(SerializerInterface::class);
+        $serializeMock->expects(self::once())
+            ->method('deserialize')
+            ->willReturn([]);
+
+        $mockHandler = new MockHandler(
+            [new Response(200, [], '{}')]
+        );
+        $stack = HandlerStack::create($mockHandler);
+        $guzzleClient = new Client(['handler' => $stack]);
+
+        $client = new AuthClient('clientId', 'clientSecret', $guzzleClient, $serializeMock, $this->exceptionConvertor);
+
+        $client->getToken();
     }
 }

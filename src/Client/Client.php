@@ -46,11 +46,16 @@ final class Client implements ClientInterface
         $this->assertValidClass($returnType);
         $json = $this->get($url);
 
-        return $this->serializer->deserialize($json, $returnType, 'json');
+        $deserialized = $this->serializer->deserialize($json, $returnType, 'json');
+
+        if (! $deserialized instanceof $returnType) {
+            throw new DeserializationException(sprintf('Unable deserialize to expected object %s', $returnType));
+        }
+        return $deserialized;
     }
 
     /**
-     * @template T
+     * @template T of object
      *
      * @param string          $url
      * @param object          $data
@@ -58,7 +63,7 @@ final class Client implements ClientInterface
      *
      * @return T
      */
-    public function post(string $url, object $data, string $returnType)
+    public function post(string $url, object $data, string $returnType): object
     {
         $this->assertValidClass($returnType);
         $json = $this->serializer->serialize($data, 'json');
@@ -70,7 +75,12 @@ final class Client implements ClientInterface
             ],
         ]);
 
-        return $this->serializer->deserialize($response->getBody()->getContents(), $returnType, 'json');
+        $deserialized = $this->serializer->deserialize($response->getBody()->getContents(), $returnType, 'json');
+
+        if (! $deserialized instanceof $returnType) {
+            throw new DeserializationException(sprintf('Unable deserialize to expected object %s', $returnType));
+        }
+        return $deserialized;
     }
 
     /**

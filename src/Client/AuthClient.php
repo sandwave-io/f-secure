@@ -7,6 +7,7 @@ namespace SandwaveIo\FSecure\Client;
 use GuzzleHttp\RequestOptions;
 use JMS\Serializer\SerializerInterface;
 use SandwaveIo\FSecure\Entity\AccessToken;
+use SandwaveIo\FSecure\Exception\DeserializationException;
 use SandwaveIo\FSecure\Exception\FsecureException;
 use GuzzleHttp\ClientInterface;
 use SandwaveIo\FSecure\Service\ThrowableConvertor;
@@ -66,6 +67,11 @@ final class AuthClient implements AuthClientInterface
             throw $this->exceptionConvertor->convert($exception);
         }
 
-        return $this->serializer->deserialize($response->getBody()->getContents(), AccessToken::class, 'json');
+        $deserialized = $this->serializer->deserialize($response->getBody()->getContents(), AccessToken::class, 'json');
+
+        if (! $deserialized instanceof AccessToken) {
+            throw new DeserializationException(sprintf('Unable deserialize to expected object %s', AccessToken::class));
+        }
+        return $deserialized;
     }
 }

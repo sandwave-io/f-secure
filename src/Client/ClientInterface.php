@@ -21,7 +21,7 @@ interface ClientInterface
     public function getEntity(string $url, string $returnType): object;
 
     /**
-     * @template T
+     * @template T of object
      *
      * @param string          $url
      * @param object          $data
@@ -29,5 +29,5 @@ interface ClientInterface
      *
      * @return T
      */
-    public function post(string $url, object $data, string $returnType);
+    public function post(string $url, object $data, string $returnType): object;
 }

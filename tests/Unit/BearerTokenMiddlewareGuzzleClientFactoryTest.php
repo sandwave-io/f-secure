@@ -12,7 +12,7 @@ use SandwaveIo\FSecure\Client\AuthClientInterface;
 
 use function PHPUnit\Framework\assertInstanceOf;
 
-final class BearerTokenMiddlewareRestClientFactoryTest extends TestCase
+final class BearerTokenMiddlewareGuzzleClientFactoryTest extends TestCase
 {
     public function testCreate(): void
     {
