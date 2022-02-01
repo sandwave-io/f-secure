@@ -1,0 +1,279 @@
+{
+	"info": {
+		"_postman_id": "6908639c-d754-4945-a07f-f4bb6c911457",
+		"name": "F-secure",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get_available_products",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{url}}licenses/get_available_products",
+					"host": [
+						"{{url}}licenses"
+					],
+					"path": [
+						"get_available_products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get_orders",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{url}}licenses/get_orders",
+					"host": [
+						"{{url}}licenses"
+					],
+					"path": [
+						"get_orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "new_order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"variationId\": 1,\r\n\"storeId\": {{storeId}},\r\n\"customerReference\": \"sdfsafd\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}licenses/new_order",
+					"host": [
+						"{{url}}licenses"
+					],
+					"path": [
+						"new_order"
+					],
+					"query": [
+						{
+							"key": "variationId",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "customerReference",
+							"value": "123|456",
+							"disabled": true
+						},
+						{
+							"key": "storeId",
+							"value": "123",
+							"disabled": true
+						},
+						{
+							"key": "scope",
+							"value": "license_orders_write",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "suspend_order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n//\"customerReference\": \"123|456\"\r\n\"licenseKey\": \"XXXX-XXXX-XXXX-XXXX\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}licenses/suspend_order",
+					"host": [
+						"{{url}}licenses"
+					],
+					"path": [
+						"suspend_order"
+					],
+					"query": [
+						{
+							"key": "variationId",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "customerReference",
+							"value": "123|456",
+							"disabled": true
+						},
+						{
+							"key": "storeId",
+							"value": "123",
+							"disabled": true
+						},
+						{
+							"key": "scope",
+							"value": "license_orders_write",
+							"disabled": true
+						},
+						{
+							"key": "licenseKey",
+							"value": "XXXX-XXXX-XXXX-XXXX",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{access_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"const tokenUrl = pm.environment.get('tokenurl');",
+					"const clientId = pm.environment.get('client_id');",
+					"const clientSecret = pm.environment.get('client_secret');",
+					"const scope = pm.environment.get('scope');",
+					"const grant_type = pm.environment.get('grant_type');",
+					"",
+					"const getTokenRequest = {",
+					"  method: 'POST',",
+					"  headers: {",
+					"    'Content-Type': 'application/x-www-form-urlencoded;',",
+					"    'Accept': 'application/json'",
+					"  },",
+					"  url: tokenUrl,",
+					"  body: {",
+					"    mode: 'urlencoded',",
+					"    urlencoded : [",
+					"        { key: 'grant_type', value: grant_type },",
+					"        { key: 'client_id', value: clientId },",
+					"        { key: 'client_secret', value: clientSecret },",
+					"        { key: 'scope', value: scope },",
+					"    ]",
+					"  }",
+					"};",
+					"",
+					"pm.sendRequest(getTokenRequest, (err, response) => {",
+					"  const jsonResponse = response.json();",
+					"  const newAccessToken = jsonResponse.access_token;",
+					"  pm.variables.set('access_token', newAccessToken);",
+					"});",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "access_token",
+			"value": ""
+		},
+		{
+			"key": "url",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "tokenurl",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "grant_type",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "client_id",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "client_secret",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "scope",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "storeId",
+			"value": "",
+			"type": "default"
+		}
+	]
+}

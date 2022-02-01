@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace SandwaveIo\FSecure\Client;
 
-use SandwaveIo\FSecure\Exception\FsecureException;
+use SandwaveIo\FSecure\Exception\FSecureException;
 
-interface RestClientInterface
+interface ClientInterface
 {
     /**
      * @template T of object
@@ -14,19 +14,15 @@ interface RestClientInterface
      * @param string          $url
      * @param class-string<T> $returnType
      *
-     * @throws FsecureException
+     * @throws FSecureException
      *
      * @return T
+     *
      */
     public function getEntity(string $url, string $returnType): object;
 
     /**
-     * @throws FsecureException
-     */
-    public function getRawData(string $url): string;
-
-    /**
-     * @template T
+     * @template T of object
      *
      * @param string          $url
      * @param object          $data
@@ -34,5 +30,5 @@ interface RestClientInterface
      *
      * @return T
      */
-    public function post(string $url, object $data, string $returnType);
+    public function post(string $url, object $data, string $returnType): object;
 }

@@ -1,0 +1,18 @@
+{
+  "items": [
+    {
+      "customerReference": "customer1",
+      "licenseKey": "XXXX-YYYY-ZZZZ-BBBB"
+    },
+    {
+      "customerReference": "customer1",
+      "licenseKey": "XXXX-YYYY-ZZZZ-CCCC"
+    }
+  ],
+  "already_suspended_items": [
+    {
+      "customerReference": "customer1",
+      "licenseKey": "XXXX-YYYY-ZZZZ-AAAA"
+    }
+  ]
+}

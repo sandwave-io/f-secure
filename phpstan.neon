@@ -4,13 +4,15 @@ includes:
     - vendor/spaze/phpstan-disallowed-calls/disallowed-insecure-calls.neon
     - vendor/spaze/phpstan-disallowed-calls/disallowed-loose-calls.neon
 parameters:
-    # checkGenericClassInNonGenericObjectType: false
-    # checkMissingIterableValueType: false
-    level: 8
+    level: 9
     paths:
         - src
         - tests
     ergebnis:
         classesAllowedToBeExtended:
             - RuntimeException
-            - SandwaveIo\FSecure\Exception\FsecureException
+            - SandwaveIo\FSecure\Exception\FSecureException
+    disallowedFunctionCalls:
+        -
+            function: 'dump()'
+            message: 'use logger instead'

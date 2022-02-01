@@ -1,0 +1,6 @@
+{
+  "missing_required": true,
+  "missing_fields": [
+    "either_licenseKey_or_customerReference"
+  ]
+}

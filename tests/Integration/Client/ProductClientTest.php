@@ -2,30 +2,33 @@
 
 declare(strict_types=1);
 
-namespace SandwaveIo\Acronis\Tests\Integration\Client;
+namespace SandwaveIo\FSecure\Tests\Integration\Client;
 
-use GuzzleHttp\Client;
+use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
 use JMS\Serializer\Naming\SerializedNameAnnotationStrategy;
 use JMS\Serializer\SerializerBuilder;
+use JMS\Serializer\SerializerInterface;
 use PHPUnit\Framework\TestCase;
-use SandwaveIo\FSecure\Client\RestClient;
-use SandwaveIo\FSecure\FsecureClient;
+use SandwaveIo\FSecure\Client\Client;
+use SandwaveIo\FSecure\Client\ProductClient;
+use SandwaveIo\FSecure\Exception\DeserializationException;
+use SandwaveIo\FSecure\Service\ThrowableConvertor;
 
 final class ProductClientTest extends TestCase
 {
     public function testGet(): void
     {
-        $jsonResponse = '{"items":[{"type":"recurring","duration":0,"amount":10,"sku":"xx10","ean":"xx10","distributorPrice":"6.62","resellerPrice":null,"suggestedRetailPrice":null,"variationId":640,"sellType":"continuous","canSell":true,"productId":21,"productLine":"","productTitle":"F-Secure TOTAL Recurring","language":"en"},{"type":"recurring","duration":0,"amount":15,"sku":"xx15","ean":"xx15","distributorPrice":"9.95","resellerPrice":null,"suggestedRetailPrice":null,"variationId":641,"sellType":"continuous","canSell":true,"productId":21,"productLine":"","productTitle":"F-Secure TOTAL Recurring","language":"en"},{"type":"recurring","duration":0,"amount":1,"sku":"xx01","ean":"xx01","distributorPrice":"0.67","resellerPrice":null,"suggestedRetailPrice":null,"variationId":642,"sellType":"continuous","canSell":true,"productId":21,"productLine":"","productTitle":"F-Secure TOTAL Recurring","language":"en"},{"type":"recurring","duration":0,"amount":20,"sku":"xx20","ean":"xx20","distributorPrice":"13.27","resellerPrice":null,"suggestedRetailPrice":null,"variationId":643,"sellType":"continuous","canSell":true,"productId":21,"productLine":"","productTitle":"F-Secure TOTAL Recurring","language":"en"},{"type":"recurring","duration":0,"amount":25,"sku":"xx25","ean":"xx20","distributorPrice":"16.58","resellerPrice":null,"suggestedRetailPrice":null,"variationId":644,"sellType":"continuous","canSell":true,"productId":21,"productLine":"","productTitle":"F-Secure TOTAL Recurring","language":"en"},{"type":"recurring","duration":0,"amount":3,"sku":"xx03","ean":"xx03","distributorPrice":"1.99","resellerPrice":null,"suggestedRetailPrice":null,"variationId":645,"sellType":"continuous","canSell":true,"productId":21,"productLine":"","productTitle":"F-Secure TOTAL Recurring","language":"en"},{"type":"recurring","duration":0,"amount":5,"sku":"xx05","ean":"xx05","distributorPrice":"3.32","resellerPrice":null,"suggestedRetailPrice":null,"variationId":646,"sellType":"continuous","canSell":true,"productId":21,"productLine":"","productTitle":"F-Secure TOTAL Recurring","language":"en"},{"type":"recurring","duration":0,"amount":7,"sku":"xx07","ean":"xx07","distributorPrice":"4.64","resellerPrice":null,"suggestedRetailPrice":null,"variationId":647,"sellType":"continuous","canSell":true,"productId":21,"productLine":"","productTitle":"F-Secure TOTAL Recurring","language":"en"}]}';
+        $json = (string) file_get_contents(__DIR__ . '/../Data/Response/GetAvailableProducts.json');
 
         $mockHandler = new MockHandler(
-            [new Response(200, [], $jsonResponse)]
+            [new Response(200, [], $json)]
         );
         $stack = HandlerStack::create($mockHandler);
-        $guzzle = new Client(['handler' => $stack]);
+        $httpClient = new GuzzleClient(['handler' => $stack]);
 
         $serializerBuilder = new SerializerBuilder();
         $serializer = $serializerBuilder->setPropertyNamingStrategy(
@@ -34,10 +37,11 @@ final class ProductClientTest extends TestCase
             )
         )->build();
 
-        $restClient = new RestClient($guzzle, $serializer);
+        $client = new Client($httpClient, $serializer, new ThrowableConvertor());
 
-        $fsecureClient = new FsecureClient($restClient);
-        $productCollection = $fsecureClient->getProductClient()->get();
+        $productClient = new ProductClient($client);
+        $productCollection = $productClient->get();
+
         $firstProduct = $productCollection->items[0];
 
         self::assertCount(8, $productCollection->items);
@@ -56,5 +60,25 @@ final class ProductClientTest extends TestCase
         self::assertSame('', $firstProduct->productLine);
         self::assertSame('F-Secure TOTAL Recurring', $firstProduct->productTitle);
         self::assertSame('en', $firstProduct->language);
+    }
+
+    public function testGetDeserializeException(): void
+    {
+        $this->expectException(DeserializationException::class);
+        $serializeMock = $this->createMock(SerializerInterface::class);
+        $serializeMock->expects(self::once())
+            ->method('deserialize')
+            ->willReturn([]);
+
+        $mockHandler = new MockHandler(
+            [new Response(200, [], '{}')]
+        );
+        $stack = HandlerStack::create($mockHandler);
+        $httpClient = new GuzzleClient(['handler' => $stack]);
+
+        $client = new Client($httpClient, $serializeMock, new ThrowableConvertor());
+
+        $productClient = new ProductClient($client);
+        $productClient->get();
     }
 }

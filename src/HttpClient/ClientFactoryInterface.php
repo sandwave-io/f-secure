@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SandwaveIo\FSecure;
+namespace SandwaveIo\FSecure\HttpClient;
 
 use GuzzleHttp\ClientInterface;
 
-interface RestClientFactoryInterface
+interface ClientFactoryInterface
 {
     public function create(): ClientInterface;
 }

@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace SandwaveIo\FSecure\Exception;
 
-final class ResourceNotFoundException extends FsecureException
+final class ResourceNotFoundException extends FSecureException
 {
 }

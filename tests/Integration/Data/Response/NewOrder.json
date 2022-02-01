@@ -1,0 +1,25 @@
+{
+  "customerReference": "Test order",
+  "storeId": 123,
+  "created": "2020-01-02T02:01:01.000Z",
+  "rows": [
+    {
+      "licenseKey": "ABCDE-FGHIJ-KLMNO-PQRST",
+      "installationUrl": "https://localhost/ABCDE-FGHIJ-KLMNO-PQRST",
+      "variationId": 1,
+      "type": "new",
+      "duration": 360,
+      "amount": 1,
+      "sku": "FCFXBR1N001XH",
+      "ean": "6430052573209",
+      "productId": 10,
+      "productTitle": "Safe",
+      "language": "en",
+      "productLine": "",
+      "sellType": "continuous",
+      "distributorPrice": 123.45,
+      "resellerPrice": 123.45,
+      "suggestedRetailPrice": 123.45
+    }
+  ]
+}

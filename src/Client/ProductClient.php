@@ -10,9 +10,9 @@ final class ProductClient
 {
     private const AVAILABLE_PRODUCTS = 'licenses/get_available_products';
 
-    private RestClientInterface $client;
+    private ClientInterface $client;
 
-    public function __construct(RestClientInterface $client)
+    public function __construct(ClientInterface $client)
     {
         $this->client = $client;
     }
