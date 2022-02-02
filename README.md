@@ -3,8 +3,14 @@
 
 # F-secure API Client
 
+[![Codecov](https://codecov.io/gh/sandwave-io/f-secure/branch/main/graph/badge.svg)](https://packagist.org/packages/sandwave-io/f-secure)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/sandwave-io/f-secure/CI)](https://packagist.org/packages/sandwave-io/f-secure)
+[![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/sandwave-io/f-secure)](https://packagist.org/packages/sandwave-io/f-secure)
+[![Packagist PHP Version Support](https://img.shields.io/packagist/v/sandwave-io/f-secure)](https://packagist.org/packages/sandwave-io/f-secure)
+[![Packagist Downloads](https://img.shields.io/packagist/dt/sandwave-io/f-secure)](https://packagist.org/packages/sandwave-io/f-secure)
 
-## How to use (REST API)
+
+## How to use (API)
 
 ```bash
 composer require sandwave-io/f-secure
