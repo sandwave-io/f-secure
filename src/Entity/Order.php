@@ -18,18 +18,21 @@ final class Order
 
     /**
      * @var DateTimeImmutable
+     *
      * @Serializer\Type("DateTimeImmutable<'Y-m-d H:i:s', '', 'Y-m-d\TH:i:s.vP'>")
      */
     public DateTimeImmutable $created;
 
     /**
      * @var OrderVariation[]
+     *
      * @Serializer\Type("array<SandwaveIo\FSecure\Entity\OrderVariation>")
      */
     public array $variations;
 
     /**
      * @var OrderVariation[]
+     *
      * @Serializer\Type("array<SandwaveIo\FSecure\Entity\OrderVariation>")
      */
     public array $rows;

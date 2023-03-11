@@ -10,7 +10,9 @@ final class ProductCollection
 {
     /**
      * @var Product[]
+     *
      * @Serializer\Type("array<SandwaveIo\FSecure\Entity\Product>")
+     *
      * @Serializer\SerializedName("items")
      */
     public array $items;
